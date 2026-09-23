@@ -14,7 +14,23 @@ Dieses Dokument definiert Richtlinien, Konventionen und Arbeitsanweisungen für 
 
 ---
 
-## 2. Architektur & Repository-Regeln
+## 2. Transparenz & KI-Kennzeichnung (Guideline)
+
+Aus Gründen der Offenheit und Nachvollziehbarkeit muss jeglicher von oder mit KI generierte Code transparent gekennzeichnet werden:
+
+1. **Datei-Header (Kommentar am Anfang jeder Codedatei):**
+   - Jede Quellcodedatei (z. B. HTML, CSS, TypeScript, JavaScript), die von einer KI erstellt oder maßgeblich mitgestaltet wurde, muss einen Header-Kommentar mit folgenden Angaben enthalten:
+     - **Projekt / Modul:** Name der Komponente bzw. des Unterprojekts
+     - **Erstellt mit:** KI-Assistent (z. B. *Antigravity AI / Pair-Programming Agent*)
+     - **Erstellt für / Autor:** Name des Entwicklers (z. B. *J-Moessmer*)
+     - **Datum / Version:** Erstellungs- oder Änderungsdatum
+     - **Hinweis:** Kurzer Hinweis zur KI-Unterstützung (z. B. *"Generiert auf Basis einer Handskizze"*).
+2. **Inline-Kommentare bei KI-generierten Teilblöcken:**
+   - Größere, spezifische KI-generierte Logikblöcke oder Vektor-Grafiken (z. B. SVG-Geometrien) sollen durch Kommentare kenntlich gemacht werden.
+
+---
+
+## 3. Architektur & Repository-Regeln
 
 1. **Monorepo / Multi-Projekt-Struktur:**
    - Jedes Teilprojekt oder jede Übung erhält einen eigenen, sprechenden Unterordner (z. B. `vogel-atlas-html/`).
@@ -34,7 +50,7 @@ Dieses Dokument definiert Richtlinien, Konventionen und Arbeitsanweisungen für 
 
 ---
 
-## 3. Deployment & CI/CD Konventionen
+## 4. Deployment & CI/CD Konventionen
 
 - Das Projekt nutzt **GitHub Pages** für die Direktansicht von Webanwendungen.
 - Unterprojekte sind über `https://<owner>.github.io/<repo>/<subproject-folder>/` direkt erreichbar.

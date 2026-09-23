@@ -24,6 +24,9 @@ Dieses Dokument erfasst die durchgeführten Arbeitsschritte, Entscheidungen und 
     - Markdown: Formatierungsregeln für Überschriften, Listen und Code-Blöcke korrigiert.
 - [x] **Agenten-Infrastruktur**
   - Anlage des `.agents/`-Ordners mit `agents.md`, `context.md` und `workplan.md`.
+- [x] **Transparenz & KI-Kennzeichnung**
+  - Richtlinie in `agents.md` aufgenommen.
+  - Header-Kommentar mit Ersteller- und KI-Angaben in `vogel-atlas-html/index.html` eingefügt.
 
 ---
 
