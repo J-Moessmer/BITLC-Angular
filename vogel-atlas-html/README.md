@@ -37,7 +37,8 @@ Dieses Unterprojekt bildet die Umsetzung einer Handskizze für einen Vogel-Atlas
 ```text
 vogel-atlas-html/
 ├── README.md      # Dokumentation des Teilprojekts
-└── index.html     # Haupt-HTML-Seite mit integrierter Vektorgrafik und Layout
+├── index.html     # Haupt-HTML-Seite mit integrierter Vektorgrafik und Layout
+└── template.html  # Wiederverwendbare HTML-Seitenvorlage mit Breadcrumbs
 ```
 
 ---
