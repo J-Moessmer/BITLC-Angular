@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vogel Atlas Deutschland</title>
+</head>
+<body>
+
+    <!-- Kopfbereich / Header -->
+    <header>
+        <table width="100%">
+            <tr>
+                <td>
+                    <h1>Vogel Atlas Deutschland</h1>
+                </td>
+                <td align="right">
+                    <!-- Suchfeld -->
+                    <form action="#" method="get">
+                        <label for="search">🔍 Suche:</label>
+                        <input type="search" id="search" name="q" placeholder="Vogelart oder Region...">
+                        <button type="submit">Finden</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+        <hr>
+    </header>
+
+    <!-- Hauptbereich mit Seitenleiste (Sidebar) und Inhalt -->
+    <table width="100%" border="0" cellpadding="10" cellspacing="0">
+        <tr valign="top">
+            <!-- Sidebar / Navigation -->
+            <td width="220" bgcolor="#f5f5f5">
+                <nav>
+                    <h3>Navigation</h3>
+                    <ul>
+                        <li><a href="#vogelkarte">Vogelkarte</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#siehe-auch">Siehe auch</a></li>
+                        <li><a href="#spenden">Spenden</a></li>
+                    </ul>
+
+                    <hr>
+
+                    <ul>
+                        <li><a href="#ueber-uns">Über uns</a></li>
+                        <li><a href="#impressum">Impressum</a></li>
+                    </ul>
+                </nav>
+            </td>
+
+            <!-- Trennlinie vertikal -->
+            <td width="10"></td>
+
+            <!-- Hauptinhalt -->
+            <td>
+                <main>
+                    <!-- Bereich 1: Deutschlandkarte -->
+                    <section id="vogelkarte">
+                        <fieldset>
+                            <legend><h2>Wo interessieren dich Vögel?</h2></legend>
+                            <p>Wähle eine Region oder ein Bundesland aus, um vorkommende Vogelarten anzuzeigen:</p>
+
+                            <!-- SVG-Karte von Deutschland mit klickbaren Bundesländern -->
+                            <svg viewBox="0 0 600 750" width="100%" max-width="500" height="auto" style="max-height: 480px; display: block; margin: 0 auto;">
+                                <!-- Norddeutschland -->
+                                <a href="#region-nord">
+                                    <path d="M180,60 L380,40 L450,110 L410,210 L190,200 Z" fill="#d0e1fd" stroke="#333333" stroke-width="2">
+                                        <title>Norddeutschland (SH, HH, MV, NI, HB)</title>
+                                    </path>
+                                    <text x="270" y="130" font-family="sans-serif" font-size="16" fill="#111" font-weight="bold">Norddeutschland</text>
+                                </a>
+
+                                <!-- Ostdeutschland -->
+                                <a href="#region-ost">
+                                    <path d="M330,200 L510,210 L490,420 L340,390 Z" fill="#d7ecd9" stroke="#333333" stroke-width="2">
+                                        <title>Ostdeutschland (BB, BE, ST, SN, TH)</title>
+                                    </path>
+                                    <text x="370" y="300" font-family="sans-serif" font-size="16" fill="#111" font-weight="bold">Ostdeutschland</text>
+                                </a>
+
+                                <!-- Westdeutschland -->
+                                <a href="#region-west">
+                                    <path d="M120,200 L330,200 L340,390 L180,430 L110,320 Z" fill="#fedac2" stroke="#333333" stroke-width="2">
+                                        <title>Westdeutschland (NW, HE, RP, SL)</title>
+                                    </path>
+                                    <text x="170" y="310" font-family="sans-serif" font-size="16" fill="#111" font-weight="bold">Westdeutschland</text>
+                                </a>
+
+                                <!-- Süddeutschland -->
+                                <a href="#region-sued">
+                                    <path d="M160,430 L490,410 L480,680 L200,690 L150,560 Z" fill="#fdecc2" stroke="#333333" stroke-width="2">
+                                        <title>Süddeutschland (BW, BY)</title>
+                                    </path>
+                                    <text x="270" y="550" font-family="sans-serif" font-size="16" fill="#111" font-weight="bold">Süddeutschland</text>
+                                </a>
+                            </svg>
+
+                            <p align="center">
+                                <em>(Klicke auf eine Region in der Karte oder wähle aus der Liste)</em>
+                            </p>
+
+                            <!-- Alternative Textlinks für Barrierefreiheit / reine HTML-Navigation -->
+                            <ul>
+                                <li><a href="#region-nord">Norddeutschland</a> (Küste, Wattenmeer, Seenplatte)</li>
+                                <li><a href="#region-west">Westdeutschland</a> (Mittelgebirge, Rheintal)</li>
+                                <li><a href="#region-ost">Ostdeutschland</a> (Heidelandschaften, Spreewald)</li>
+                                <li><a href="#region-sued">Süddeutschland</a> (Schwarzwald, Voralpenland, Alpen)</li>
+                            </ul>
+                        </fieldset>
+                    </section>
+
+                    <br>
+
+                    <!-- Bereich 2: Vogel des Monats -->
+                    <section id="vogel-des-monats">
+                        <fieldset>
+                            <legend><h2>Vogel des Monats</h2></legend>
+
+                            <table cellpadding="8">
+                                <tr>
+                                    <td valign="top">
+                                        <!-- Vogel-Grafik (SVG-Vogel entsprechend der Handzeichnung) -->
+                                        <svg width="220" height="170" viewBox="0 0 220 170">
+                                            <!-- Körper -->
+                                            <ellipse cx="90" cy="115" rx="55" ry="32" fill="#e9ecef" stroke="#222" stroke-width="3" />
+                                            <!-- Flügelkontur -->
+                                            <path d="M 60 110 Q 90 90 125 118" fill="none" stroke="#222" stroke-width="2" />
+                                            <!-- Hals -->
+                                            <path d="M 125 105 L 142 62" stroke="#222" stroke-width="5" stroke-linecap="round" />
+                                            <!-- Kopf -->
+                                            <circle cx="152" cy="52" r="20" fill="#e9ecef" stroke="#222" stroke-width="3" />
+                                            <!-- Schnabel -->
+                                            <polygon points="172,50 205,55 172,62" fill="#f8b84e" stroke="#222" stroke-width="2" />
+                                            <!-- Auge -->
+                                            <circle cx="156" cy="46" r="3.5" fill="#222" />
+                                        </svg>
+                                    </td>
+                                    <td valign="top">
+                                        <h3>Stockente (Anas platyrhynchos)</h3>
+                                        <p>
+                                            <strong>Größe:</strong> ca. 50–65 cm<br>
+                                            <strong>Lebensraum:</strong> Seen, Flüsse, Parkteiche und Küstengewässer<br>
+                                            <strong>Nahrung:</strong> Wasserpflanzen, Sämereien, Schnecken, Würmer
+                                        </p>
+                                        <p>
+                                            Die Stockente ist die bekannteste und am weitesten verbreitete Gründelente in ganz Deutschland. 
+                                            Erpel zeigen im Prachtkleid einen leuchtend metallisch-grünen Kopf und ein weißes Halsband.
+                                        </p>
+                                        <a href="#mehr-zur-stockente">&rarr; Mehr über die Stockente erfahren</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </section>
+
+                    <br>
+
+                    <!-- Zusätzliche Abschnitte passend zur Navigation -->
+                    <section id="blog">
+                        <fieldset>
+                            <legend><h3>Aktuelles aus dem Blog</h3></legend>
+                            <article>
+                                <h4>Herbstzug der Kraniche hat begonnen</h4>
+                                <p><small>Veröffentlicht am 20. September</small></p>
+                                <p>Zehntausende Kraniche sammeln sich derzeit in den Rastgebieten im Norden und Osten Deutschlands...</p>
+                            </article>
+                        </fieldset>
+                    </section>
+
+                    <br>
+
+                    <section id="spenden">
+                        <fieldset>
+                            <legend><h3>Spenden für den Artenschutz</h3></legend>
+                            <p>Unterstütze lokale Schutzprojekte für bedrohte Vogelarten in ganz Deutschland.</p>
+                            <button type="button">Jetzt spenden</button>
+                        </fieldset>
+                    </section>
+                </main>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Fußbereich / Footer -->
+    <footer>
+        <hr>
+        <table width="100%">
+            <tr>
+                <td id="ueber-uns">
+                    <small><strong>Über uns:</strong> Das Projekt Vogel Atlas Deutschland kartiert und dokumentiert Vogelbeobachtungen.</small>
+                </td>
+                <td align="right" id="impressum">
+                    <small>&copy; 2026 Vogel Atlas Deutschland &bull; <a href="#impressum">Impressum</a> &bull; <a href="#datenschutz">Datenschutz</a></small>
+                </td>
+            </tr>
+        </table>
+    </footer>
+
+</body>
+</html>
