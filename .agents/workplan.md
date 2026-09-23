@@ -26,7 +26,10 @@ Dieses Dokument erfasst die durchgeführten Arbeitsschritte, Entscheidungen und 
   - Anlage des `.agents/`-Ordners mit `agents.md`, `context.md` und `workplan.md`.
 - [x] **Transparenz & KI-Kennzeichnung**
   - Richtlinie in `agents.md` aufgenommen.
-  - Header-Kommentar mit Ersteller- und KI-Angaben in `vogel-atlas-html/index.html` eingefügt.
+  - Header-Kommentar mit Ersteller- und KI-Angaben in allen Codedateien eingefügt.
+- [x] **Layout-Konsistenz, Breadcrumbs & Template-Erstellung**
+  - Links-bündige Breadcrumb-Navigation unter der Kopfzeile in `vogel-atlas-html/index.html` eingefügt.
+  - Wiederverwendbare [`vogel-atlas-html/template.html`](file:///c:/Users/Jmoessmer/Documents/_GITHUB_Repos/BITLC-Angular/vogel-atlas-html/template.html) mit fixem Header, Breadcrumb, Sidebar und Footer sowie markiertem austauschbaren Content-Block (`<main>`) erstellt.
 
 ---
 

@@ -39,10 +39,12 @@ mindmap
 
 ```text
 BITLC-Angular/
+├── .agents/               # Richtlinien, Kontext & Arbeitsplan
 ├── .vscode/               # Editor-spezifische Einstellungen
 ├── vogel-atlas-html/      # Unterprojekt: Vogel Atlas Deutschland
 │   ├── README.md          # Detaillierte Dokumentation des Unterprojekts
-│   └── index.html         # Quellcode & Ansicht
+│   ├── index.html         # Quellcode & Ansicht (Original)
+│   └── template.html      # Wiederverwendbare Vorlage mit Breadcrumbs
 └── README.md              # Hauptdokumentation (diese Datei)
 ```
 
