@@ -35,7 +35,7 @@ Dieses Dokument erfasst die durchgeführten Arbeitsschritte, Entscheidungen und 
 
 ## 2. Offene & Zukünftige Aufgaben (Backlog)
 
-- [ ] **GitHub Pages Deployment aktivieren**
+- [x] **GitHub Pages Deployment aktivieren**
   - Repository-Einstellungen auf GitHub (`Settings > Pages`) auf `main` branch und `/ (root)` setzen.
 - [ ] **Weitere Teilprojekte anlegen**
   - Z. B. Angular-Lernprojekte oder interaktive Webanwendungen jeweils in eigenen Unterordnern ergänzen.
