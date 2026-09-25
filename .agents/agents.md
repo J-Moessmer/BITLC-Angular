@@ -35,14 +35,22 @@ Aus Gründen der Offenheit und Nachvollziehbarkeit muss jeglicher von oder mit K
 1. **Monorepo / Multi-Projekt-Struktur:**
    - Jedes Teilprojekt oder jede Übung erhält einen eigenen, sprechenden Unterordner (z. B. `vogel-atlas-html/`).
    - Jedes Unterprojekt enthält eine eigene `README.md` mit Inhaltsverzeichnis, Architektur-Diagrammen (`mermaid`) und Codebeispielen.
-   - Das Root-Verzeichnis enthält keine spezifischen App-HTML-Dateien, sondern dient als Einstiegspunkt mit der zentralen `README.md`.
-2. **Dokumentations-Standards:**
+   - Das Root-Verzeichnis enthält keine spezifischen App-HTML-Dateien, sondern dient als Einstiegspunkt mit der zentralen `README.md` und einer Weiterleitung (`index.html`).
+2. **Template-System (vogel-atlas-html):**
+   - Neue Unterseiten im VogelFinder sollen auf Basis der `template.html` erstellt werden.
+   - Jede Seite erhält den einheitlichen Header mit Suchfeld, Breadcrumb-Navigation, Sidebar und Footer.
+   - Breadcrumbs: Startseite → ggf. Zwischenebene → Aktuelle Seite.
+   - Die Sidebar-Navigation muss auf allen Seiten identisch sein (Alle Vögel, Vogelkarte, Blog, Siehe auch, Spenden).
+3. **Asset-Verwaltung:**
+   - Bilder und Medien liegen im Ordner `Assets/` innerhalb des jeweiligen Unterprojekts.
+   - Bilddateien verwenden beschreibende Dateinamen und werden relativ referenziert (z. B. `Assets/Common_Blackbird.jpg`).
+4. **Dokumentations-Standards:**
    - Alle Markdown-Dateien müssen `markdownlint`-konform sein:
      - Leerzeilen um Überschriften (`MD022`)
      - Leerzeilen um Listen (`MD032`)
      - Leerzeilen und Sprachkennzeichnung bei Code-Blocks (`MD031`, `MD040`)
      - Keine Doppelpunkte am Ende von Überschriften (`MD026`)
-3. **HTML-Standards:**
+5. **HTML-Standards:**
    - Valides HTML5.
    - Keine veralteten Attribute verwenden (z. B. kein `width`, `align`, `valign`, `bgcolor` auf HTML-Tags).
    - Tabellenzeilen (`<tr>`) immer in `<tbody>`, `<thead>` oder `<tfoot>` kapseln.
@@ -54,3 +62,4 @@ Aus Gründen der Offenheit und Nachvollziehbarkeit muss jeglicher von oder mit K
 
 - Das Projekt nutzt **GitHub Pages** für die Direktansicht von Webanwendungen.
 - Unterprojekte sind über `https://<owner>.github.io/<repo>/<subproject-folder>/` direkt erreichbar.
+- Die Root-`index.html` leitet automatisch zum aktiven Unterprojekt weiter.
