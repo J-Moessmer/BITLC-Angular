@@ -1,0 +1,121 @@
+<!--
+=============================================================================
+Projekt:       VogelFinder (BITLC-Angular / vogel-atlas-html)
+Datei:         template.html
+Autor:         J-Moessmer
+Erstellt mit:  KI-Unterstützung (Antigravity AI / Google DeepMind Agent)
+Datum:         2026-09-23
+Beschreibung:  Wiederverwendbares HTML-Seiten-Template mit einheitlichem Header,
+               Breadcrumb-Navigation, Sidebar und Footer.
+               Nur der Inhalt im <main>-Tag wird pro Seite ausgetauscht.
+=============================================================================
+-->
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Seitentitel anpassen -->
+    <title>Seitentitel - VogelFinder</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Kopfbereich / Header (Einheitlich über die gesamte Seite) -->
+    <header>
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <h1>VogelFinder</h1>
+                    </td>
+                    <td>
+                        <!-- Suchfeld -->
+                        <form action="#" method="get">
+                            <label for="search">🔍 Suche:</label>
+                            <input type="search" id="search" name="q" placeholder="Vogelart oder Region...">
+                            <button type="submit">Finden</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+        <!-- Breadcrumb-Navigation (Linksbündig unter der Kopfzeile) -->
+        <nav aria-label="Breadcrumb">
+            <p>
+                <a href="index.html">Startseite</a> &gt;
+                <span>Aktuelle Seite</span>
+            </p>
+        </nav>
+        <hr>
+    </header>
+
+    <!-- Hauptbereich mit Seitenleiste (Sidebar) und Inhalt -->
+    <table>
+        <tbody>
+            <tr>
+                <!-- Sidebar / Navigation (Einheitlich über die gesamte Seite) -->
+                <td valign="top">
+                    <nav aria-label="Hauptnavigation">
+                        <h3>Navigation</h3>
+                        <ul>
+                            <li><a href="Alle_voegel.html">Alle Vögel</a></li>
+                            <li><a href="index.html#vogelkarte">Vogelkarte</a></li>
+                            <li><a href="Blog.html">Blog</a></li>
+                            <li><a href="Siehe Auch.html">Siehe auch</a></li>
+                            <li><a href="Spenden.html">Spenden</a></li>
+                        </ul>
+                    </nav>
+                </td>
+
+                <!-- Hauptinhalt (Nur dieser Block ändert sich je Seite) -->
+                <td valign="top">
+                    <main>
+                        <!-- ============================================== -->
+                        <!-- START: SEITENSPEZIFISCHER INHALT (CONTENT BLOCK)-->
+                        <!-- ============================================== -->
+
+                        <section id="seiteninhalt">
+                            <fieldset>
+                                <legend>
+                                    <h2>Titel des Seiteninhalts</h2>
+                                </legend>
+                                <p>Hier wird der spezifische Inhalt der jeweiligen Unterseite eingefügt.</p>
+                            </fieldset>
+                        </section>
+
+                        <!-- ============================================== -->
+                        <!-- ENDE: SEITENSPEZIFISCHER INHALT                 -->
+                        <!-- ============================================== -->
+                    </main>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Fußbereich / Footer (Einheitlich über die gesamte Seite) -->
+    <footer>
+        <hr>
+        <table>
+            <tbody>
+                <tr>
+                    <td id="ueber-uns">
+                        <small><strong>Über uns:</strong> Das Projekt Vogel Atlas Deutschland kartiert und dokumentiert
+                            Vogelbeobachtungen.</small>
+                    </td>
+                    <td id="impressum">
+                        <small>&copy; 2026 Vogel Atlas Deutschland &bull; <a
+                                href="Datenschutzimpressum.html">Impressum</a> &bull; <a
+                                href="Datenschutzimpressum.html">Datenschutz</a></small>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </footer>
+
+</body>
+
+</html>

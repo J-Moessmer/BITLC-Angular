@@ -1,0 +1,234 @@
+<!--
+=============================================================================
+Projekt:       Vogelfinder (BITLC-Angular / vogel-atlas-html)
+Datei:         index.html
+Autor:         J-Moessmer
+Erstellt mit:  KI-Unterstützung (Antigravity AI / Google DeepMind Agent)
+Datum:         2026-09-23
+Beschreibung:  Reiner HTML5-Prototyp ohne CSS und ohne JavaScript,
+               umgesetzt auf Basis einer handschriftlichen Konzeptskizze. 
+=============================================================================
+-->
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VogelFinder</title>
+    <base href="./">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Kopfbereich / Header -->
+    <header>
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <h1>VogelFinder</h1>
+                    </td>
+                    <td>
+                        <!-- Suchfeld -->
+                        <form action="#" method="get">
+                            <label for="search">🔍 Suche:</label>
+                            <input type="search" id="search" name="q" placeholder="Vogelart oder Region...">
+                            <button type="submit">Finden</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- Breadcrumb Navigation -->
+        <nav aria-label="Breadcrumb">
+            <p>
+                <a href="index.html">Startseite</a>
+            </p>
+        </nav>
+        <hr>
+    </header>
+
+    <!-- Hauptbereich mit Seitenleiste (Sidebar) und Inhalt -->
+    <table>
+        <tbody>
+            <tr>
+                <!-- Sidebar / Navigation -->
+                <td valign="top">
+                    <nav aria-label="Hauptnavigation">
+                        <h3>Navigation</h3>
+                        <ul>
+                            <li><a href="Alle_voegel.html">Alle Vögel</a></li>
+                            <li><a href="index.html#vogelkarte">Vogelkarte</a></li>
+                            <li><a href="Blog.html">Blog</a></li>
+                            <li><a href="Siehe Auch.html">Siehe auch</a></li>
+                            <li><a href="Spenden.html">Spenden</a></li>
+                        </ul>
+                    </nav>
+                </td>
+
+                <!-- Hauptinhalt -->
+                <td valign="top">
+                    <main>
+                        <!-- Bereich 1: Deutschlandkarte -->
+                        <section id="vogelkarte">
+                            <fieldset>
+                                <legend>
+                                    <h2>Wo interessieren dich Vögel?</h2>
+                                </legend>
+                                <p>Wähle eine Region oder ein Bundesland aus, um vorkommende Vogelarten anzuzeigen:</p>
+
+                                <!-- SVG-Karte von Deutschland mit klickbaren Bundesländern (reines SVG/HTML) -->
+                                <div>
+                                    <svg viewBox="0 0 600 750" width="450" height="560"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <!-- Norddeutschland -->
+                                        <a href="Gebiet_nord.html">
+                                            <path d="M180,60 L380,40 L450,110 L410,210 L190,200 Z" fill="#d0e1fd"
+                                                stroke="#333333" stroke-width="2">
+                                                <title>Norddeutschland (SH, HH, MV, NI, HB)</title>
+                                            </path>
+                                            <text x="270" y="130" font-family="sans-serif" font-size="16" fill="#111111"
+                                                font-weight="bold">Norddeutschland</text>
+                                        </a>
+
+                                        <!-- Ostdeutschland -->
+                                        <a href="Gebiet_ost.html">
+                                            <path d="M330,200 L510,210 L490,420 L340,390 Z" fill="#d7ecd9"
+                                                stroke="#333333" stroke-width="2">
+                                                <title>Ostdeutschland (BB, BE, ST, SN, TH)</title>
+                                            </path>
+                                            <text x="370" y="300" font-family="sans-serif" font-size="16" fill="#111111"
+                                                font-weight="bold">Ostdeutschland</text>
+                                        </a>
+
+                                        <!-- Westdeutschland -->
+                                        <a href="Gebiet_west.html">
+                                            <path d="M120,200 L330,200 L340,390 L180,430 L110,320 Z" fill="#fedac2"
+                                                stroke="#333333" stroke-width="2">
+                                                <title>Westdeutschland (NW, HE, RP, SL)</title>
+                                            </path>
+                                            <text x="170" y="310" font-family="sans-serif" font-size="16" fill="#111111"
+                                                font-weight="bold">Westdeutschland</text>
+                                        </a>
+
+                                        <!-- Süddeutschland -->
+                                        <a href="Gebiet_Sued.html">
+                                            <path d="M160,430 L490,410 L480,680 L200,690 L150,560 Z" fill="#fdecc2"
+                                                stroke="#333333" stroke-width="2">
+                                                <title>Süddeutschland (BW, BY)</title>
+                                            </path>
+                                            <text x="270" y="550" font-family="sans-serif" font-size="16" fill="#111111"
+                                                font-weight="bold">Süddeutschland</text>
+                                        </a>
+                                    </svg>
+                                    <p><em>(Klicke auf eine Region in der Karte oder wähle aus der Liste)</em></p>
+                                </div>
+
+                                <!-- Alternative Textlinks für reine HTML-Navigation -->
+                                <ul>
+                                    <li><a href="Gebiet_nord.html">Norddeutschland</a> (Küste, Wattenmeer, Seenplatte)
+                                    </li>
+                                    <li><a href="Gebiet_west.html">Westdeutschland</a> (Mittelgebirge, Rheintal)</li>
+                                    <li><a href="Gebiet_ost.html">Ostdeutschland</a> (Heidelandschaften, Spreewald)</li>
+                                    <li><a href="Gebiet_Sued.html">Süddeutschland</a> (Schwarzwald, Voralpenland, Alpen)
+                                    </li>
+                                </ul>
+                            </fieldset>
+                        </section>
+
+                        <br>
+
+                        <!-- Bereich 2: Vogel des Monats -->
+                        <section id="vogel-des-monats">
+                            <fieldset>
+                                <legend>
+                                    <h2>Vogel des Monats</h2>
+                                </legend>
+
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+
+                                                <img src="Assets/Perruche_à_collier_(Psittacula_krameri).jpg"
+                                                    alt="Halsbandsittich" width="256" height="256"><br>
+                                            </td>
+                                            <td>
+                                                <h3>Halsbandsittich</h3>
+                                                <p>
+                                                    Der Halsbandsittich ist ein auffälliger, tropischer Papagei, der
+                                                    sich in vielen
+                                                    Stadtparks etabliert hat.
+                                                </p>
+                                                <p>
+                                                    <a href="Vogel_Halsbandsittich.html">&rarr; Mehr über den
+                                                        Halsbandsittich erfahren</a>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </fieldset>
+                        </section>
+
+                        <br>
+
+                        <!-- Zusätzliche Abschnitte passend zur Navigation -->
+                        <section id="blog">
+                            <fieldset>
+                                <legend>
+                                    <h3><a href="Blog.html">Aktuelles aus dem Blog</a></h3>
+                                </legend>
+                                <article>
+                                    <h4>Herbstzug der Kraniche hat begonnen</h4>
+                                    <p><small>Veröffentlicht am 20. September</small></p>
+                                    <p>Zehntausende Kraniche sammeln sich derzeit in den Rastgebieten im Norden und
+                                        Osten Deutschlands...</p>
+                                </article>
+                            </fieldset>
+                        </section>
+
+                        <br>
+
+                        <section id="spenden">
+                            <fieldset>
+                                <legend>
+                                    <h3>Spenden für den Artenschutz</h3>
+                                </legend>
+                                <p>Unterstütze lokale Schutzprojekte für bedrohte Vogelarten in ganz Deutschland.</p>
+                                <form action="Spenden.html" method="get">
+                                    <button type="submit">Jetzt spenden </button>
+                                </form>
+                            </fieldset>
+                        </section>
+                    </main>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Fußbereich / Footer -->
+    <footer>
+        <hr>
+        <table>
+            <tbody>
+                <tr>
+                    <td id="ueber-uns">
+                        <small><strong>Über uns:</strong> Das Projekt Vogel Atlas Deutschland kartiert und dokumentiert
+                            Vogelbeobachtungen.</small>
+                    </td>
+                    <td id="impressum">
+                        <small>&copy; 2026 Vogel Atlas Deutschland &bull; <a
+                                href="Datenschutzimpressum.html">Impressum</a> &bull; <a
+                                href="Datenschutzimpressum.html">Datenschutz</a></small>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </footer>
+
+</body>
+
+</html>
