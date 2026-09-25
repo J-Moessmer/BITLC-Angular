@@ -1,0 +1,18 @@
+# Stop indexing heavy dependencies
+node_modules/
+bower_components/
+
+# Ignore build artifacts
+dist/
+build/
+.next/
+
+# Ignore media (Gemini doesn't need to 'read' a PNG)
+*.png
+*.jpg
+*.mp4
+
+# Ignore logs and lockfiles
+*.log
+package-lock.json
+yarn.lock
