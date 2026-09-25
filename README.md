@@ -2,6 +2,10 @@
 
 Dieses Repository sammelt meine Schulübungen zur Webentwicklung. Die Projekte bauen aufeinander auf und zeigen den Lernweg von einer ersten HTML5-Webseite bis zur Gestaltung mit CSS und späteren Framework-Projekten.
 
+## Live ansehen
+
+**GitHub Pages:** <https://j-moessmer.github.io/BITLC-Angular/>
+
 ## Startseite
 
 Die zentrale Projektübersicht befindet sich in der [Haupt-Landingpage](./index.html). Von dort aus können die fertigen Übungen geöffnet werden.
@@ -54,12 +58,6 @@ Die Projekte benötigen keine Installation von Node.js oder npm:
 3. Ein Projekt über die Landingpage auswählen oder die jeweilige `index.html` direkt öffnen.
 
 Alternativ kann die [Haupt-Landingpage](./index.html) in VS Code mit **Open with Live Server** gestartet werden.
-
-## GitHub Pages
-
-Die zentrale Übersicht ist online erreichbar unter:
-
-<https://j-moessmer.github.io/BITLC-Angular/>
 
 Direkte Projektlinks:
 
