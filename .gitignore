@@ -33,3 +33,4 @@ yarn-error.log*
 # KI-Agenten Caches und Protokolle
 .agents/
 .antigravityignore
+.ignore

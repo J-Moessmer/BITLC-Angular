@@ -1,0 +1,196 @@
+:root {
+    --background: #eef5f1;
+    --surface: #ffffff;
+    --surface-muted: #dcebe5;
+    --text: #17342d;
+    --muted: #526b63;
+    --accent: #176b5b;
+    --accent-dark: #0d473b;
+    --border: #c5ddd4;
+    --shadow: 0 0.75rem 2rem rgba(23, 52, 45, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 1rem;
+    color: var(--text);
+    background: var(--background);
+    font-family: "Segoe UI", Arial, sans-serif;
+    line-height: 1.6;
+}
+
+header,
+main,
+footer {
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+header {
+    border-radius: 1rem 1rem 0 0;
+}
+
+main {
+    border-top: 0;
+    border-bottom: 0;
+}
+
+footer {
+    border-radius: 0 0 1rem 1rem;
+}
+
+h1,
+h2,
+h3 {
+    color: var(--accent-dark);
+    line-height: 1.2;
+}
+
+a {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+a:hover,
+a:focus-visible {
+    color: var(--accent-dark);
+}
+
+header > table,
+body > table,
+main table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0.75rem;
+}
+
+header > table td {
+    vertical-align: middle;
+}
+
+header > table td:last-child {
+    text-align: right;
+}
+
+body > table > tbody > tr > td:first-child {
+    width: 190px;
+    min-width: 190px;
+    vertical-align: top;
+}
+
+body > table > tbody > tr > td:last-child {
+    width: auto;
+    vertical-align: top;
+}
+
+nav ul {
+    padding-left: 1.25rem;
+}
+
+nav li {
+    margin: 0.5rem 0;
+}
+
+input,
+button {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 0.45rem;
+    font: inherit;
+}
+
+button {
+    color: #fff;
+    background: var(--accent);
+    cursor: pointer;
+}
+
+button:hover,
+button:focus-visible {
+    background: var(--accent-dark);
+}
+
+fieldset {
+    margin: 1.5rem 0;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: #fbfefd;
+}
+
+legend {
+    padding: 0 0.5rem;
+}
+
+svg {
+    max-width: 100%;
+    height: auto;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    background: var(--surface-muted);
+}
+
+svg a path {
+    transition: filter 160ms ease, transform 160ms ease;
+}
+
+svg a:hover path,
+svg a:focus-visible path {
+    filter: brightness(0.9);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.65rem;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+}
+
+@media (max-width: 700px) {
+    body {
+        padding: 0;
+    }
+
+    header,
+    main,
+    footer {
+        padding: 1rem;
+        border-radius: 0;
+    }
+
+    header > table,
+    body > table,
+    main table,
+    header > table tbody,
+    body > table tbody,
+    main table tbody,
+    header > table tr,
+    body > table tr,
+    main table tr,
+    header > table td,
+    body > table td,
+    main table td {
+        display: block;
+        width: 100%;
+    }
+
+    header > table td:last-child {
+        text-align: left;
+    }
+
+    body > table > tbody > tr > td:first-child,
+    body > table > tbody > tr > td:last-child {
+        width: 100%;
+        min-width: 0;
+    }
+}
