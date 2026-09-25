@@ -101,22 +101,10 @@ Auszug aus der barrierefreien und klickbaren Vektorkarte (`vogel-atlas-html/inde
 
 ## Bereitstellung auf GitHub Pages (Direkt im Browser ansehen)
 
-GitHub stellt HTML-Dateien standardmäßig im Repository nur als Quelltext dar. Damit Nutzer und Betrachter die Website **sofort interaktiv als echte Webseite im Browser** sehen können, aktivierst du **GitHub Pages**:
+GitHub stellt HTML-Dateien standardmäßig im Repository nur als Quelltext dar. Damit Nutzer und Betrachter die Website **sofort interaktiv als echte Webseite im Browser** sehen können, gibt es **Github Pages**
 
-### Schritt-für-Schritt Anleitung
-
-1. Öffne dein Repository auf GitHub: `https://github.com/J-Moessmer/BITLC-Angular`
-2. Klicke oben auf **Settings** (Einstellungen).
-3. Wähle im linken Menü den Punkt **Pages** (unter *Code and automation*).
-4. Unter **Build and deployment**:
-   - **Source:** Wähle `Deploy from a branch`
-   - **Branch:** Wähle `main` und den Ordner `/ (root)`
-   - Klicke auf **Save**.
-5. Nach 1–2 Minuten ist das Unterprojekt live erreichbar unter:
-
-   ```text
-   https://j-moessmer.github.io/BITLC-Angular/vogel-atlas-html/
-   ```
+https://j-moessmer.github.io/BITLC-Angular/vogel-atlas-html/
+   
 
 ---
 
