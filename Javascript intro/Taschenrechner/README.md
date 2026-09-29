@@ -25,19 +25,40 @@ Die App prüft, ob die Eingabe gültig ist, berechnet das Ergebnis und lässt de
 - Fehlerbehandlung bei ungültiger Eingabe oder Division durch null
 - Schleife für neue Rechnungen bis zum Abbruch
 
-## Starten
+## Lokale Ausführung
 
-Im Ordner des Taschenrechners:
+1. In das Repository-Verzeichnis wechseln:
 
-```bash
-node index.js
-```
+   ```bash
+   cd /pfad/zu/BITLC-Angular
+   ```
 
-Oder im Repository-Root:
+2. Abhängigkeiten installieren:
 
-```bash
-npm start
-```
+   ```bash
+   npm install
+   ```
+
+3. Das Programm starten:
+
+   ```bash
+   npm start
+   ```
+
+   Oder direkt im Taschenrechner-Ordner:
+
+   ```bash
+   cd "Javascript intro/Taschenrechner"
+   node index.js
+   ```
+
+4. Eine Rechnung eingeben, z. B.:
+
+   ```txt
+   12+4*2
+   ```
+
+5. Mit `exit` oder `Strg+C` beenden.
 
 ## Beispiel
 
