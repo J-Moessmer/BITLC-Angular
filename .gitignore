@@ -14,6 +14,7 @@
 
 # Environment files
 /.env
+.env*
 
 # Angular CLI and build artefacts
 /.angular-cli.json
@@ -23,14 +24,53 @@
 *.tsbuildinfo
 
 # Logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
 # IDE und Editor-Einstellungen
 .vscode/
+.idea/
+*.swp
+*.swo
+
+# Betriebssystem-Dateien
+.DS_Store
+Thumbs.db
 
 # KI-Agenten Caches und Protokolle
 .agents/
+AGENTS.md
 .antigravityignore
 .ignore
+**/.agents/
+**/AGENTS.md
+**/.prompt.md
+**/.instructions.md
+**/*.prompt.md
+**/*.instructions.md
+**/*.agent.md
+**/copilot-instructions.md
+**/prompts/
+**/prompt/
+
+# Tool-spezifische private Konfigurationen
+.vscode/
+.github/
+.copilot/
+.workspace/
+workspaceStorage/
+.vscode-test/
+
+# Generierte oder temporäre Dateien
+.cache/
+.tmp/
+.temp/
+*.tmp
+*.bak
+*.orig
+
+# Test- und Coverage-Ausgaben
+.nyc_output/
+coverage/
