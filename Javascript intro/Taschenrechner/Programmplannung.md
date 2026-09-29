@@ -38,12 +38,12 @@
 
 ## Geplante Umsetzung
 
-1. Die komplette Berechnungsaufgabe als String einlesen.
+1. Die komplette Berechnungsaufgabe als String einlesen von der Konsole
 2. Leerzeichen entfernen und den String in ein Array `tokens` zerlegen. Jedes Element ist entweder eine Zahl oder einer der Operatoren `+`, `-`, `*`, `/`.
 3. Prüfen, ob die Tokenisierung den gesamten String erfasst hat und die Elemente abwechselnd Zahl, Operator, Zahl sind. Der erste und letzte Eintrag müssen Zahlen sein.
 4. Bei ungültiger Eingabe eine Fehlermeldung anzeigen und eine neue Aufgabe einlesen.
 5. Das gültige `tokens`-Array auswerten: zuerst `*` und `/` von links nach rechts berechnen, danach `+` und `-` von links nach rechts. Division durch null als Fehler behandeln.
-6. Das Ergebnis anzeigen und wieder eine neue Aufgabe einlesen.
+6. Das Ergebnis in der konsole anzeigen und wieder eine neue Aufgabe in die konsole einlesen.
 
 ## Programmablauf als Mermaid
 
