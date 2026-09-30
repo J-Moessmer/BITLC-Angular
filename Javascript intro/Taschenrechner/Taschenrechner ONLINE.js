@@ -8,8 +8,6 @@
  * Disclaimer: Dieses Programm dient ausschließlich zu Lern- und Übungszwecken.
  */
 
-const readline = require('readline');
-
 // Wandelt die Benutzereingabe in eine Folge von Zahlen und Operatoren um.
 function tokenize(expression) {
   const cleaned = expression.replace(/\s+/g, '');
@@ -148,58 +146,30 @@ function calculate(tokens) {
   return values[0];
 }
 
-// Startet die interaktive Konsolen-Schleife für neue Rechnungen.
+// Verbindet die Rechenlogik mit der statischen GitHub-Pages-Seite.
 function startCalculator() {
-  console.log('Kleiner Taschenrechner');
-  console.log('Beenden mit "exit" oder Strg+C');
+  const form = document.querySelector('#calculator-form');
+  const input = document.querySelector('#expression');
+  const result = document.querySelector('#result');
+  const error = document.querySelector('#error');
 
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
-  // Wird wieder aufgerufen, damit der Benutzer immer wieder eine neue Rechnung eingeben kann.
-  function askForInput() {
-    rl.question('\nBerechnung > ', (input) => {
-      const expression = input.trim();
-
-      if (!expression) {
-        askForInput();
-        return;
-      }
-
-      if (expression.toLowerCase() === 'exit') {
-        console.log('Programm beendet.');
-        rl.close();
-        return;
-      }
-
-      try {
-        const tokens = tokenize(expression);
-        const result = calculate(tokens);
-        console.log(`Ergebnis: ${result}`);
-      } catch (error) {
-        console.log(`Fehler: ${error.message}`);
-      }
-
-      askForInput();
-    });
+  if (!form || !input || !result || !error) {
+    return;
   }
 
-  rl.on('SIGINT', () => {
-    console.log('\nProgramm beendet.');
-    rl.close();
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    result.textContent = '';
+    error.textContent = '';
+
+    try {
+      const tokens = tokenize(input.value);
+      const calculation = calculate(tokens);
+      result.textContent = `Ergebnis: ${calculation}`;
+    } catch (calculationError) {
+      error.textContent = calculationError.message;
+    }
   });
-
-  askForInput();
 }
 
-if (require.main === module) {
-  startCalculator();
-}
-
-module.exports = {
-  tokenize,
-  calculate,
-  startCalculator,
-};
+document.addEventListener('DOMContentLoaded', startCalculator);
