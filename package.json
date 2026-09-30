@@ -1,11 +1,14 @@
 {
   "scripts": {
-    "start": "node \"Javascript intro/Taschenrechner/index.js\""
+    "start": "node \"Javascript intro/Taschenrechner/index.js\"",
+    "build:typescript": "tsc -p \"Javascript intro/Taschenrechner - Typescript/tsconfig.node.json\" && tsc -p \"Javascript intro/Taschenrechner - Typescript/tsconfig.browser.json\"",
+    "start:typescript": "npm run build:typescript && node \"Javascript intro/Taschenrechner - Typescript/index.js\""
   },
   "dependencies": {
     "prompt-sync": "^4.2.0"
   },
   "devDependencies": {
-    "@types/node": "^26.6.3"
+    "@types/node": "^26.6.3",
+    "typescript": "^5.9.3"
   }
 }

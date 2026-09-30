@@ -3,6 +3,6 @@
  * Hinweis: Dieses Lernprojekt wird ohne Gewährleistung bereitgestellt.
  */
 
-const { startCalculator } = require('./Taschenrechner');
+import { startCalculator } from './Taschenrechner.js';
 
 startCalculator();

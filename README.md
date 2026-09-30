@@ -40,6 +40,14 @@ Die zentrale Projektübersicht befindet sich in der [Haupt-Landingpage](./index.
 - **Beschreibung:** Konsole-basierter Taschenrechner mit Eingabevalidierung und Operator-Priorität.
 - **Schwerpunkte:** Tokenisierung, Fehlererkennung, Berechnungsvorschrift, Eingabe-Schleife und Abbruch per `exit` oder `Ctrl+C`.
 
+### 4. TypeScript – Taschenrechner
+
+- **Ordner:** [Javascript intro/Taschenrechner - Typescript](./Javascript%20intro/Taschenrechner%20-%20Typescript/)
+- **Dokumentation:** [Javascript intro/Taschenrechner - Typescript/README.md](./Javascript%20intro/Taschenrechner%20-%20Typescript/README.md)
+- **Browserseite:** [Javascript intro/Taschenrechner - Typescript/index.html](./Javascript%20intro/Taschenrechner%20-%20Typescript/index.html)
+- **Beschreibung:** TypeScript-Version des Taschenrechners mit Konsolen- und Browserausgabe.
+- **Schwerpunkte:** Union-Typen, strikte Typprüfung, Node.js- und DOM-Konfiguration sowie Kompilierung für GitHub Pages.
+
 ## Repository-Struktur
 
 ```text
@@ -57,6 +65,14 @@ BITLC-Angular/
 │       ├── Taschenrechner.js
 │       ├── Programmplannung.md
 │       └── programplanzeichnung.png
+│   └── Taschenrechner - Typescript/
+│       ├── README.md
+│       ├── index.html
+│       ├── index.ts
+│       ├── Taschenrechner.ts
+│       ├── Taschenrechner ONLINE.ts
+│       ├── tsconfig.node.json
+│       └── tsconfig.browser.json
 ├── vogel-atlas-html/              # Übung mit reinem HTML5
 │   ├── index.html
 │   └── README.md
@@ -100,6 +116,16 @@ Oder aus dem Repository-Root:
 ```bash
 npm start
 ```
+
+### TypeScript-Taschenrechner
+
+```bash
+npm install
+npm run build:typescript
+npm run start:typescript
+```
+
+Die Browser-Version kann nach dem Build über [`Javascript intro/Taschenrechner - Typescript/index.html`](./Javascript%20intro/Taschenrechner%20-%20Typescript/index.html) geöffnet werden.
 
 Direkte Projektlinks:
 
