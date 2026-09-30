@@ -2,7 +2,7 @@
 
 ## Überblick
 
-Dieses Projekt ist ein kleiner JavaScript-Taschenrechner für grundlegende Rechenoperationen. Die Online-Version läuft direkt im Browser und kann über GitHub Pages geöffnet werden. Die Eingabe erfolgt als kompletter Rechenausdruck, zum Beispiel:
+Dieses Projekt ist ein kleiner TypeScript-Taschenrechner für grundlegende Rechenoperationen. Die Online-Version läuft direkt im Browser und kann über GitHub Pages geöffnet werden. Die Eingabe erfolgt als kompletter Rechenausdruck, zum Beispiel:
 
 ```txt
 10+2*3
@@ -72,12 +72,12 @@ Fehler: Division durch 0 ist nicht erlaubt.
 
 ## Online-Version
 
-Die Browser-Version liegt in `index.html` und `Taschenrechner ONLINE.js`. Beide Dateien werden von GitHub Pages direkt als statische Dateien ausgeliefert.
+Die Browser-Version liegt in `index.html` und `Taschenrechner ONLINE.ts`. Beide Dateien werden von GitHub Pages direkt als statische Dateien ausgeliefert.
 
 ## Wichtige Dateien
 
-- `Taschenrechner.js` – Kernlogik zur Tokenisierung und Berechnung
-- `Taschenrechner ONLINE.js` – Browser-Version für GitHub Pages
+- `Taschenrechner.ts` – Kernlogik zur Tokenisierung und Berechnung
+- `Taschenrechner ONLINE.ts` – Browser-Version für GitHub Pages
 - `index.html` – Webseite der Browser-Version
-- `index.js` – Einstiegspunkt für die Konsole
+- `index.ts` – Einstiegspunkt für die Konsole
 - `Programmplannung.md` – Aufgabenbeschreibung und Planungsdokument
