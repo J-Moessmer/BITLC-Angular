@@ -11,7 +11,7 @@ Dieser Ordner enthält kleine JavaScript-Übungen und Lernbeispiele für die Ein
 - `index001.js` – erste JavaScript-Einführung
 - `index002.js` – weitere grundlegende Anwendungsbeispiele
 - `Taschenrechner/` – JavaScript-Taschenrechner mit Eingabe- und Validierungslogik
-- `Taschenrechner - Typescript/` – TypeScript-Version für Konsole und Browser
+- `../Typescript intro/Taschenrechner - Typescript/` – TypeScript-Version für Konsole und Browser
 
 ## Taschenrechner
 
@@ -44,4 +44,4 @@ npm run build:typescript
 npm run start:typescript
 ```
 
-Die Browser-Seite befindet sich in `Taschenrechner - Typescript/index.html`.
+Die Browser-Seite befindet sich in `../Typescript intro/Taschenrechner - Typescript/index.html`.

@@ -37,5 +37,5 @@
     "moduleDetection": "auto",
     "skipLibCheck": true,
   },
-  "include": ["Javascript intro/Taschenrechner - Typescript/**/*.ts"]
+  "include": ["Typescript intro/Taschenrechner - Typescript/**/*.ts"]
 }
