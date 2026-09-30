@@ -2,14 +2,14 @@
 
 ## Überblick
 
-Dieses Projekt ist ein kleiner TypeScript-Taschenrechner für grundlegende Rechenoperationen. Die Online-Version läuft direkt im Browser und kann über GitHub Pages geöffnet werden. Die Eingabe erfolgt als kompletter Rechenausdruck, zum Beispiel:
+Dieses Projekt ist ein kleiner TypeScript-Taschenrechner für grundlegende Rechenoperationen. TypeScript wird für die Konsolen- und Browser-Version kompiliert. Die Eingabe erfolgt als kompletter Rechenausdruck, zum Beispiel:
 
 ```txt
 10+2*3
 5-2+4
 ```
 
-Die App prüft, ob die Eingabe gültig ist, und berechnet das Ergebnis direkt auf der Webseite. Die ursprüngliche Konsolenversion kann weiterhin lokal gestartet werden.
+Die App prüft, ob die Eingabe gültig ist, und berechnet das Ergebnis entweder in der Konsole oder direkt auf der Webseite.
 
 ## Hinweis / Disclaimer
 
@@ -24,6 +24,7 @@ Die App prüft, ob die Eingabe gültig ist, und berechnet das Ergebnis direkt au
 - Korrekte Priorität: `*` und `/` vor `+` und `-`
 - Fehlerbehandlung bei ungültiger Eingabe oder Division durch null
 - Bedienung über eine statische HTML-Seite ohne Server-Code
+- Typprüfung und Kompilierung mit TypeScript
 
 ## Lokale Ausführung
 
@@ -39,17 +40,16 @@ Die App prüft, ob die Eingabe gültig ist, und berechnet das Ergebnis direkt au
    npm install
    ```
 
-3. Die Konsolenversion starten:
+3. TypeScript kompilieren und die Konsolenversion starten:
 
    ```bash
-   npm start
+   npm run start:typescript
    ```
 
-   Oder direkt im Taschenrechner-Ordner:
+   Nur kompilieren:
 
    ```bash
-   cd "Javascript intro/Taschenrechner"
-   node index.js
+   npm run build:typescript
    ```
 
 4. Eine Rechnung eingeben, z. B.:
@@ -72,7 +72,7 @@ Fehler: Division durch 0 ist nicht erlaubt.
 
 ## Online-Version
 
-Die Browser-Version liegt in `index.html` und `Taschenrechner ONLINE.ts`. Beide Dateien werden von GitHub Pages direkt als statische Dateien ausgeliefert.
+Nach `npm run build:typescript` liegen die Browser-Dateien in diesem Ordner. Die HTML-Seite lädt die kompilierte `Taschenrechner ONLINE.js` und kann direkt über GitHub Pages geöffnet werden.
 
 ## Wichtige Dateien
 
@@ -80,4 +80,6 @@ Die Browser-Version liegt in `index.html` und `Taschenrechner ONLINE.ts`. Beide 
 - `Taschenrechner ONLINE.ts` – Browser-Version für GitHub Pages
 - `index.html` – Webseite der Browser-Version
 - `index.ts` – Einstiegspunkt für die Konsole
+- `tsconfig.node.json` – TypeScript-Konfiguration für Node.js
+- `tsconfig.browser.json` – TypeScript-Konfiguration für den Browser
 - `Programmplannung.md` – Aufgabenbeschreibung und Planungsdokument

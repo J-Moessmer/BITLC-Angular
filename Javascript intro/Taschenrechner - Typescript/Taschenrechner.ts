@@ -8,10 +8,13 @@
  * Disclaimer: Dieses Programm dient ausschließlich zu Lern- und Übungszwecken.
  */
 
-const readline = require('readline');
+import { createInterface } from 'node:readline';
+
+type Operator = '+' | '-' | '*' | '/';
+type Token = number | Operator;
 
 // Wandelt die Benutzereingabe in eine Folge von Zahlen und Operatoren um.
-function tokenize(expression) {
+export function tokenize(expression: string): Token[] {
   const cleaned = expression.replace(/\s+/g, '');
 
   if (cleaned.length === 0) {
@@ -19,7 +22,7 @@ function tokenize(expression) {
   }
 
   // Hier sammeln wir die einzelnen Bestandteile der Rechnung.
-  const tokens = [];
+  const tokens: Token[] = [];
   // Zeiger für die aktuelle Position im String.
   let index = 0;
   // True = als Nächstes muss eine Zahl kommen, false = ein Operator erwartet.
@@ -27,7 +30,7 @@ function tokenize(expression) {
 
   // Jede Stelle im String wird geprüft: Zahl oder Operator oder ungültiges Zeichen.
   while (index < cleaned.length) {
-    const char = cleaned[index];
+    const char = cleaned[index]!;
 
     if (/[0-9.]/.test(char)) {
       if (!expectingNumber) {
@@ -39,7 +42,7 @@ function tokenize(expression) {
       let dotCount = 0;
 
       while (index < cleaned.length) {
-        const current = cleaned[index];
+        const current = cleaned[index]!;
 
         if (/[0-9]/.test(current)) {
           number += current;
@@ -76,7 +79,7 @@ function tokenize(expression) {
         throw new Error('Ungültige Reihenfolge: Operator an falscher Stelle.');
       }
 
-      tokens.push(char);
+      tokens.push(char as Operator);
       expectingNumber = true;
       index++;
       continue;
@@ -109,15 +112,15 @@ function tokenize(expression) {
 }
 
 // Berechnet die Token-Folge gemäß der üblichen Operator-Priorität.
-function calculate(tokens) {
+export function calculate(tokens: Token[]): number {
   // Kopie erstellen, damit wir das Original-Array nicht zerstören.
   const values = [...tokens];
 
   // Erst Multiplikation und Division berechnen.
   for (let i = 0; i < values.length; i++) {
     if (values[i] === '*' || values[i] === '/') {
-      const left = values[i - 1];
-      const right = values[i + 1];
+      const left = values[i - 1] as number;
+      const right = values[i + 1] as number;
 
       if (values[i] === '/' && right === 0) {
         throw new Error('Division durch 0 ist nicht erlaubt.');
@@ -132,8 +135,8 @@ function calculate(tokens) {
   // Danach Addition und Subtraktion von links nach rechts berechnen.
   for (let i = 0; i < values.length; i++) {
     if (values[i] === '+' || values[i] === '-') {
-      const left = values[i - 1];
-      const right = values[i + 1];
+      const left = values[i - 1] as number;
+      const right = values[i + 1] as number;
       const result = values[i] === '+' ? left + right : left - right;
 
       values.splice(i - 1, 3, result);
@@ -149,17 +152,17 @@ function calculate(tokens) {
 }
 
 // Startet die interaktive Konsolen-Schleife für neue Rechnungen.
-function startCalculator() {
+export function startCalculator(): void {
   console.log('Kleiner Taschenrechner');
   console.log('Beenden mit "exit" oder Strg+C');
 
-  const rl = readline.createInterface({
+  const rl = createInterface({
     input: process.stdin,
     output: process.stdout,
   });
 
   // Wird wieder aufgerufen, damit der Benutzer immer wieder eine neue Rechnung eingeben kann.
-  function askForInput() {
+  function askForInput(): void {
     rl.question('\nBerechnung > ', (input) => {
       const expression = input.trim();
 
@@ -178,8 +181,9 @@ function startCalculator() {
         const tokens = tokenize(expression);
         const result = calculate(tokens);
         console.log(`Ergebnis: ${result}`);
-      } catch (error) {
-        console.log(`Fehler: ${error.message}`);
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.log(`Fehler: ${message}`);
       }
 
       askForInput();
@@ -193,13 +197,3 @@ function startCalculator() {
 
   askForInput();
 }
-
-if (require.main === module) {
-  startCalculator();
-}
-
-module.exports = {
-  tokenize,
-  calculate,
-  startCalculator,
-};
