@@ -2,14 +2,14 @@
 
 ## Überblick
 
-Dieses Projekt ist eine kleine JavaScript-Console-Anwendung für grundlegende Rechenoperationen. Die Eingabe erfolgt als kompletter Rechenausdruck, zum Beispiel:
+Dieses Projekt ist ein kleiner JavaScript-Taschenrechner für grundlegende Rechenoperationen. Die Online-Version läuft direkt im Browser und kann über GitHub Pages geöffnet werden. Die Eingabe erfolgt als kompletter Rechenausdruck, zum Beispiel:
 
 ```txt
 10+2*3
 5-2+4
 ```
 
-Die App prüft, ob die Eingabe gültig ist, berechnet das Ergebnis und lässt den Benutzer neue Rechnungen eingeben, bis er `exit` oder `Strg+C` verwendet.
+Die App prüft, ob die Eingabe gültig ist, und berechnet das Ergebnis direkt auf der Webseite. Die ursprüngliche Konsolenversion kann weiterhin lokal gestartet werden.
 
 ## Hinweis / Disclaimer
 
@@ -17,13 +17,13 @@ Die App prüft, ob die Eingabe gültig ist, berechnet das Ergebnis und lässt de
 
 ## Funktionsumfang
 
-- Einlesen einer kompletten Berechnung aus der Konsole
+- Eingabe einer kompletten Berechnung im Browser
 - Entfernen von Leerzeichen
 - Validierung der Reihenfolge von Zahlen und Operatoren
 - Unterstützung für `+`, `-`, `*`, `/`
 - Korrekte Priorität: `*` und `/` vor `+` und `-`
 - Fehlerbehandlung bei ungültiger Eingabe oder Division durch null
-- Schleife für neue Rechnungen bis zum Abbruch
+- Bedienung über eine statische HTML-Seite ohne Server-Code
 
 ## Lokale Ausführung
 
@@ -39,7 +39,7 @@ Die App prüft, ob die Eingabe gültig ist, berechnet das Ergebnis und lässt de
    npm install
    ```
 
-3. Das Programm starten:
+3. Die Konsolenversion starten:
 
    ```bash
    npm start
@@ -70,8 +70,14 @@ Berechnung > 10/0
 Fehler: Division durch 0 ist nicht erlaubt.
 ```
 
+## Online-Version
+
+Die Browser-Version liegt in `index.html` und `Taschenrechner ONLINE.js`. Beide Dateien werden von GitHub Pages direkt als statische Dateien ausgeliefert.
+
 ## Wichtige Dateien
 
 - `Taschenrechner.js` – Kernlogik zur Tokenisierung und Berechnung
+- `Taschenrechner ONLINE.js` – Browser-Version für GitHub Pages
+- `index.html` – Webseite der Browser-Version
 - `index.js` – Einstiegspunkt für die Konsole
 - `Programmplannung.md` – Aufgabenbeschreibung und Planungsdokument
