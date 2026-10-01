@@ -10,7 +10,7 @@ Dieser Ordner enthält kleine JavaScript-Übungen und Lernbeispiele für die Ein
 
 - `index001.js` – erste JavaScript-Einführung
 - `index002.js` – weitere grundlegende Anwendungsbeispiele
-- `Taschenrechner/` – JavaScript-Taschenrechner mit Eingabe- und Validierungslogik
+- `Taschenrechner/` – JavaScript-Taschenrechner mit Eingabe- und Validierungslogik; [Planung und Programmzeichnung](./Taschenrechner/Plannung/) liegen im Unterordner `Plannung/`.
 - `../Typescript intro/Taschenrechner - Typescript/` – TypeScript-Version für Konsole und Browser
 
 ## Taschenrechner
