@@ -80,4 +80,5 @@ Die Browser-Version liegt in `index.html` und `Taschenrechner ONLINE.js`. Beide 
 - `Taschenrechner ONLINE.js` – Browser-Version für GitHub Pages
 - `index.html` – Webseite der Browser-Version
 - `index.js` – Einstiegspunkt für die Konsole
-- `Programmplannung.md` – Aufgabenbeschreibung und Planungsdokument
+- [Planungsdokument](./Plannung/Programmplannung.md) – Aufgabenbeschreibung und Planung
+- [Programmzeichnung](./Plannung/programplanzeichnung.png)

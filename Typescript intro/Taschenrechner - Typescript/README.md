@@ -82,4 +82,5 @@ Nach `npm run build:typescript` liegen die Browser-Dateien in diesem Ordner. Die
 - `index.ts` – Einstiegspunkt für die Konsole
 - `tsconfig.node.json` – TypeScript-Konfiguration für Node.js
 - `tsconfig.browser.json` – TypeScript-Konfiguration für den Browser
-- `Programmplannung.md` – Aufgabenbeschreibung und Planungsdokument
+- [Planungsdokument](./Plannung/Programmplannung.md) – Aufgabenbeschreibung und Planung
+- [Programmzeichnung](./Plannung/programplanzeichnung.png)

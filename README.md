@@ -63,9 +63,19 @@ BITLC-Angular/
 │       ├── README.md
 │       ├── index.js
 │       ├── Taschenrechner.js
-│       ├── Programmplannung.md
-│       └── programplanzeichnung.png
+│       └── Plannung/
+│           ├── Programmplannung.md
+│           └── programplanzeichnung.png
 ├── Typescript intro/              # TypeScript-Lernübungen
+│   ├── Parkhaus/
+│   │   ├── assets/
+│   │   └── Plannung/
+│   │       ├── Projektplan.md
+│   │       ├── Park-backend1.png
+│   │       ├── Park-backend2.png
+│   │       ├── Park-frontend1.png
+│   │       ├── Park-frontend2.png
+│   │       └── Park-frontend3.png
 │   └── Taschenrechner - Typescript/
 │       ├── README.md
 │       ├── index.html
@@ -73,7 +83,10 @@ BITLC-Angular/
 │       ├── Taschenrechner.ts
 │       ├── Taschenrechner ONLINE.ts
 │       ├── tsconfig.node.json
-│       └── tsconfig.browser.json
+│       ├── tsconfig.browser.json
+│       └── Plannung/
+│           ├── Programmplannung.md
+│           └── programplanzeichnung.png
 ├── vogel-atlas-html/              # Übung mit reinem HTML5
 │   ├── index.html
 │   └── README.md
