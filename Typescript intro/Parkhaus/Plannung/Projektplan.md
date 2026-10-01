@@ -132,7 +132,7 @@ Beispiele: 1 Stunde kostet 1,00 €, 2 Stunden kosten 1,90 €, 4 Stunden kosten
 
 ### Datenmodell
 
-Die aktuelle Belegung wird aus der Liste der geparkten Fahrzeuge abgeleitet, statt zusätzlich als veränderlicher Zähler gespeichert zu werden. Ausgefahrene Fahrzeuge werden für die Tagesabrechnung separat gezählt.
+Gespeichert werden die daten in 2 Objekten. Die aktuelle Belegung wird aus der Liste der geparkten Fahrzeuge abgeleitet, statt zusätzlich als veränderlicher Zähler gespeichert zu werden. Ausgefahrene Fahrzeuge werden für die Tagesabrechnung separat gezählt.
 
 ```ts
 type Auto = {
