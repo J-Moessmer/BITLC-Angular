@@ -55,22 +55,60 @@ Die Zeitskalierung bestimmt, wie schnell die Simulation gegenüber der echten Ze
 - `1`: eine simulierte Minute pro echter Minute
 - `60`: 60 simulierte Minuten pro echter Minute (eine simulierte Stunde pro echter Minute)
 
-**Parkhausstatus bei 5 belegten und 20 freien Plätzen:**
+**Parkhausstatus bei 9 belegten von 20 Plätzen (45 %):**
 
 ```ts
-Parkhaus: [OFFEN/GESCHLOSSEN]
-#####|####################
--------------- Kennzeichen ---------------
-1234 | 5678 | 9101 | 1121 | 3141
-Eingabe >
-Uhrzeit: 08:00 | Einnahmen: 0,00 €
+//bsp UI interface "laufender betrieb" 
+╔══════════════════════════════════════════════════════════════╗ <64 zeichen breite>
+║                       Parkhaus UI                            ║ <62 zeichen effektiver schriftraum>
+╠══════════════════════════════════════════════════════════════╣
+║                Parkhaus: [OFFEN/GESCHLOSSEN]                 ║
+║      #######################...........................      ║ <50 Zeichen: 23 belegt, 27 frei>
+╠══════════════════════════════════════════════════════════════╣
+║                    --- Kennzeichen ---                       ║
+║ 1111 | 2222 | 3333 | 4444 | 5555 | 6666 | 7777 | 8888 | 9999 ║
+║                                                              ║
+║ Plätze belegt: 9/20 (45 %)                                   ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║              Uhrzeit: 08:00 | Einnahmen: 0,00 €              ║
+╠══════════════════════════════════════════════════════════════╣
+╚══════════════════════════════════════════════════════════════╝
+
+// bsp UI interface "Abrechnung"
+╔══════════════════════════════════════════════════════════════╗
+║                       Abrechnung UI                          ║
+╠══════════════════════════════════════════════════════════════╣
+║      Endabrechnung / zwischenabrechnung                      ║
+╠══════════════════════════════════════════════════════════════╣
+║     --- erfasste Kennzeichen im rechnungszeitraum ---        ║
+║ 1111 | 2222 | 3333 | 4444 | 5555 | 6666 | 7777 | 8888 | 9999 ║
+║                                                              ║
+║ Summe aller erfassten Kennzeichen: 9                         ║
+╠══════════════════════════════════════════════════════════════╣
+║   Abrechnungszeitraum: 08:00 - 09:00 | Einnahmen: 0,00 €     ║
+║                                                              ║
+╠══════════════════════════════════════════════════════════════╣
+╚══════════════════════════════════════════════════════════════╝
 ```
 
-**Farbige Kopie des Belegungsbalkens:**
+Der Belegungsbalken ist immer genau 50 Zeichen lang und stellt die Auslastung proportional dar. Die Anzahl belegter Segmente wird auf die nächste ganze Zahl gerundet: `round(belegtePlaetze / kapazitaet * 50)`. Die übrigen Segmente zeigen freie Kapazität. Belegte Segmente werden im Terminal rot und freie Segmente grün dargestellt. Die Prozentzahl und die Anzahl belegter Plätze werden zusätzlich ausgeschrieben. Die Anzeige zeigt je nach Zustand `OFFEN` oder `GESCHLOSSEN` und wird nach jedem Tick aktualisiert.
 
-<span style="color:#c0392b">#####</span>|<span style="color:#27864b">####################</span>
+### ANSI-Steuerung des Hauptmenüs
 
-Jedes `#` steht für einen Stellplatz. Rot bedeutet belegt, Grün bedeutet frei. Der senkrechte Strich trennt belegte und freie Plätze und zählt nicht als Stellplatz. Die Anzeige zeigt je nach Zustand `OFFEN` oder `GESCHLOSSEN` und wird nach jedem Tick aktualisiert.
+Das Hauptmenü wird mit ANSI-Escape-Codes im Terminal aktualisiert. Vor jeder Neuzeichnung wird der Bildschirm geleert und der Cursor an den Anfang gesetzt. Farben kennzeichnen belegte und freie Segmente des Belegungsbalkens.
+
+```ts
+// Bildschirm leeren und Cursor nach oben links setzen
+process.stdout.write('\x1b[2J\x1b[H');
+
+// Belegte Segmente rot, freie Segmente gruen ausgeben
+const belegteSegmente = Math.round(geparkteAutos.length / kapazitaet * 50);
+process.stdout.write('\x1b[31m' + '#'.repeat(belegteSegmente));
+process.stdout.write('\x1b[32m' + '.'.repeat(50 - belegteSegmente) + '\x1b[0m');
+```
+
+Nach jedem Tick wird das Hauptmenü mit dem aktuellen Parkhausstatus neu gezeichnet.
 
 ### Abrechnungsmenüs
 
