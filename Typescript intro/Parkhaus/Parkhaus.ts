@@ -13,8 +13,9 @@
 //                         "K ... K" kennzeichnet KI-generierten Code.
 
 //################################################################
-//K                      zeitmodul                               K
+//M                      zeitmodul                               M
 //M   multiplkator einlesen und dann ticks zählen und ausgeben   M
+//K   Kapazität testen und ggf. auto generieren und einparken    K
 //################################################################
 
 
@@ -333,6 +334,8 @@ function renderParkhausUI(data: ParkhausData): void {
 
     // --- 5. INPUT UND ABSCHLUSS ---
     console.log('╠══════════════════════════════════════════════════════════════╣');
+    console.log('║                     ---  Befehle  ---                        ║');
+    console.log('║          öffnen | einparken | schließen | ende               ║');
     console.log('╚══════════════════════════════════════════════════════════════╝');
     process.stdout.write('\x1b[J');
 }
