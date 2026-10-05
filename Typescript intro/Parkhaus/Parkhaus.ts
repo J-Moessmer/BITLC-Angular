@@ -23,30 +23,52 @@
 import * as readline from 'node:readline/promises';
 
 async function main() {
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+    const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
     const antwort = await rl.question('Zeit-Multiplikator eingeben (1 = 1 Tick/min, 60 = 60 Ticks/min): ');
     const eingabeMultiplikator = Number(antwort);
     const multiplikator = Number.isFinite(eingabeMultiplikator) && eingabeMultiplikator > 0
         ? eingabeMultiplikator
         : 1;
 
+    let kapazitaet = 25;
+    while (true) {
+        const eingabeKapazitaet = await rl.question('Parkhausgröße eingeben [25]: ');
+        if (eingabeKapazitaet.trim() === '') break;
+
+        const neueKapazitaet = Number(eingabeKapazitaet);
+        if (Number.isInteger(neueKapazitaet) && neueKapazitaet > 0) {
+            kapazitaet = neueKapazitaet;
+            break;
+        }
+
+        console.log('Bitte eine positive ganze Zahl für die Parkhausgröße eingeben.');
+    }
+
+    const parkhaus: Parkhaus = {
+        mode: 'BETRIEB',
+        kapazitaet,
+        geparkteAutos: [],
+        ausgefahreneAutos: [],
+        einnahmenCent: 0,
+        aktuellerTick: 0,
+        istGeoeffnet: false,
+    };
+
     let ticks = 0;
     let interval: ReturnType<typeof setInterval> | undefined;
     let fragtKennzeichenAb = false;
-    testBetrieb.aktuellerTick = 0;
-    testBetrieb.istGeoeffnet = false;
-    renderParkhausUI(testBetrieb);
+    renderParkhausUI(parkhaus);
 
     const zeigeAbrechnung = () => {
         if (interval) clearInterval(interval);
         interval = undefined;
-        testBetrieb.istGeoeffnet = false;
-        for (const auto of [...testBetrieb.geparkteAutos]) {
-            ausparken(testBetrieb, auto.kennzeichen);
+        parkhaus.istGeoeffnet = false;
+        for (const auto of [...parkhaus.geparkteAutos]) {
+            ausparken(parkhaus, auto.kennzeichen);
         }
-        testBetrieb.mode = 'ABRECHNUNG';
-        testBetrieb.abrechnungszeitraum = `08:00 - ${formatSimulationszeit(testBetrieb.aktuellerTick)}`;
-        renderParkhausUI(testBetrieb);
+        parkhaus.mode = 'ABRECHNUNG';
+        parkhaus.abrechnungszeitraum = `08:00 - ${formatSimulationszeit(parkhaus.aktuellerTick)}`;
+        renderParkhausUI(parkhaus);
         rl.close();
     };
 
@@ -54,7 +76,7 @@ async function main() {
 
     const tick = () => {
         ticks++;
-        testBetrieb.aktuellerTick = ticks;
+        parkhaus.aktuellerTick = ticks;
 
         // teste öffnngszeit 14h nach 08:00 also 22:00 Uhr
 
@@ -64,30 +86,30 @@ async function main() {
         }
         //prüfung, ob geplante Parkdauer erreicht ist und auto automatisch ausparken
         const automatischAusgeparkteAutos: { auto: Auto; preisCent: number }[] = [];
-        for (const auto of [...testBetrieb.geparkteAutos]) {
+        for (const auto of [...parkhaus.geparkteAutos]) {
             const geplanteParkdauer = auto.geplanteParkdauerMinuten;
             if (geplanteParkdauer !== null && ticks - auto.einfahrtTick >= geplanteParkdauer) {
-                const ergebnis = ausparken(testBetrieb, auto.kennzeichen);
+                const ergebnis = ausparken(parkhaus, auto.kennzeichen);
                 if (ergebnis) automatischAusgeparkteAutos.push(ergebnis);
             }
         }
 
         let autoAutomatischEingefahren = false;
         // kapazitätstest
-        if (testBetrieb.istGeoeffnet && testBetrieb.geparkteAutos.length < testBetrieb.kapazitaet && generateauto()) {
-            const auto = generateAuto(ticks, testBetrieb.geparkteAutos.map((geparkt) => geparkt.kennzeichen));
-            testBetrieb.geparkteAutos.push(auto);
+        if (parkhaus.istGeoeffnet && parkhaus.geparkteAutos.length < parkhaus.kapazitaet && generateauto()) {
+            const auto = generateAuto(ticks, parkhaus.geparkteAutos.map((geparkt) => geparkt.kennzeichen));
+            parkhaus.geparkteAutos.push(auto);
             autoAutomatischEingefahren = true;
         }
 
         if (automatischAusgeparkteAutos.length > 0 || autoAutomatischEingefahren) {
-            renderParkhausUI(testBetrieb);
+            renderParkhausUI(parkhaus);
             for (const { auto, preisCent } of automatischAusgeparkteAutos) {
                 console.log(`Geplante Parkdauer erreicht: Auto ${auto.kennzeichen} ausgefahren. Kosten: ${formatEuro(preisCent)} €.`);
             }
             rl.prompt(true);
         } else {
-            updateLiveParkhausUI(testBetrieb);
+            updateLiveParkhausUI(parkhaus);
         }
     };
 
@@ -96,9 +118,9 @@ async function main() {
         if (fragtKennzeichenAb) {
             fragtKennzeichenAb = false;
             rl.setPrompt('Befehl > ');
-            const ergebnis = ausparken(testBetrieb, eingabe);
+            const ergebnis = ausparken(parkhaus, eingabe);
             if (ergebnis) {
-                renderParkhausUI(testBetrieb);
+                renderParkhausUI(parkhaus);
                 console.log(`Auto ${ergebnis.auto.kennzeichen} ausgefahren. Kosten: ${formatEuro(ergebnis.preisCent)} €.`);
             } else {
                 console.log(`Kein geparktes Auto mit Kennzeichen ${eingabe.trim()} gefunden.`);
@@ -110,26 +132,26 @@ async function main() {
         const befehl = eingabe.trim().toLocaleLowerCase('de-DE');
 
         if (befehl === 'öffnen') {
-            if (!testBetrieb.istGeoeffnet && ticks < 14 * 60) {
-                testBetrieb.istGeoeffnet = true;
-                updateLiveParkhausUI(testBetrieb);
+            if (!parkhaus.istGeoeffnet && ticks < 14 * 60) {
+                parkhaus.istGeoeffnet = true;
+                updateLiveParkhausUI(parkhaus);
                 interval = setInterval(tick, 60000 / multiplikator);
             }
         } else if (befehl === 'einparken') {
-            if (!testBetrieb.istGeoeffnet) {
+            if (!parkhaus.istGeoeffnet) {
                 console.log('Das Parkhaus ist geschlossen.');
-            } else if (testBetrieb.geparkteAutos.length >= testBetrieb.kapazitaet) {
+            } else if (parkhaus.geparkteAutos.length >= parkhaus.kapazitaet) {
                 console.log('Das Parkhaus ist voll.');
             } else {
-                const auto = generateAuto(ticks, testBetrieb.geparkteAutos.map((geparkt) => geparkt.kennzeichen));
-                testBetrieb.geparkteAutos.push(auto);
-                renderParkhausUI(testBetrieb);
+                const auto = generateAuto(ticks, parkhaus.geparkteAutos.map((geparkt) => geparkt.kennzeichen));
+                parkhaus.geparkteAutos.push(auto);
+                renderParkhausUI(parkhaus);
                 console.log(`Auto ${auto.kennzeichen} eingefahren bei Tick ${auto.einfahrtTick}.`);
             }
         } else if (befehl === 'ausparken') {
-            if (!testBetrieb.istGeoeffnet) {
+            if (!parkhaus.istGeoeffnet) {
                 console.log('Das Parkhaus ist geschlossen.');
-            } else if (testBetrieb.geparkteAutos.length === 0) {
+            } else if (parkhaus.geparkteAutos.length === 0) {
                 console.log('Es sind keine Autos geparkt.');
             } else {
                 fragtKennzeichenAb = true;
@@ -444,36 +466,5 @@ function formatSimulationszeit(tick: number): string {
     const minuten = minutenSeitMitternacht % 60;
     return `${String(stunden).padStart(2, '0')}:${String(minuten).padStart(2, '0')}`;
 }
-
-// ==========================================
-// TEST-AUFRUFE FÜR BEIDE MODI
-// ==========================================
-
-const testBetrieb: Parkhaus = {
-    mode: 'BETRIEB',
-    kapazitaet: 20,
-    geparkteAutos: [],
-    ausgefahreneAutos: [],
-    einnahmenCent: 0,
-    aktuellerTick: 0,
-    istGeoeffnet: false,
-};
-
-const testAbrechnung: Parkhaus = {
-    mode: 'ABRECHNUNG',
-    kapazitaet: 20,
-    geparkteAutos: [],
-    ausgefahreneAutos: [],
-    einnahmenCent: 1550,
-    aktuellerTick: 0,
-    istGeoeffnet: false,
-    // Test mit 12 Kennzeichen, um den Zeilenumbruch (> 9) zu demonstrieren
-    abrechnungszeitraum: '08:00 - 09:00',
-};
-
-// Teste den laufenden Betrieb (schaltet nach Belieben um)
-// renderParkhausUI(testAbrechnung);
-
-
 
 main();
