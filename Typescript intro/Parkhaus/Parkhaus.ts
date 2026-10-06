@@ -55,7 +55,7 @@ async function main() {
     };
 
     let ticks = 0;
-    let interval: ReturnType<typeof setInterval> | undefined;
+    let interval: NodeJS.Timeout | undefined;
     let fragtKennzeichenAb = false;
     renderParkhausUI(parkhaus);
 
