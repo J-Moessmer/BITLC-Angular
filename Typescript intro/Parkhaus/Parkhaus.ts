@@ -59,6 +59,7 @@ async function main() {
     let fragtKennzeichenAb = false;
     renderParkhausUI(parkhaus);
 
+    //K Beendet den Ticklauf, rechnet alle verbliebenen Autos ab und zeigt die Endabrechnung. K
     const zeigeAbrechnung = () => {
         if (interval) clearInterval(interval);
         interval = undefined;
@@ -78,19 +79,18 @@ async function main() {
         rl.close();
     };
 
-    // Ticks von MMMM in HH:MM umrechnen
-
+    //K Ein Tick ist eine Simulationsminute; der Multiplikator steuert nur den realen Zeitabstand. K
     const tick = () => {
         ticks++;
         parkhaus.aktuellerTick = ticks;
 
-        // teste öffnngszeit 14h nach 08:00 also 22:00 Uhr
-
+        //K Nach 840 Ticks endet der simulierte Öffnungstag um 22:00 Uhr. K
         if (ticks >= 14 * 60) {
             zeigeAbrechnung();
             return;
         }
-        //prüfung, ob geplante Parkdauer erreicht ist und auto automatisch ausparken
+
+        //K Geplante Parkdauer wird unabhängig von der Überlastungsregel pro Tick geprüft. K
         const automatischAusgeparkteAutos: {
             auto: Auto;
             preisCent: number;
@@ -104,6 +104,7 @@ async function main() {
             }
         }
 
+        //K Alle 120 Ticks dürfen bei mehr als 80 % Belegung die ältesten Autos ab 240 Ticks Standzeit ausfahren. K
         if (ticks % 120 === 0 && parkhaus.geparkteAutos.length / parkhaus.kapazitaet > 0.8) {
             const maximaleAusfahrten = Math.floor(parkhaus.kapazitaet * 0.1);
             const ausfahrkandidaten = [...parkhaus.geparkteAutos]
@@ -118,7 +119,7 @@ async function main() {
         }
 
         let autoAutomatischEingefahren = false;
-        // kapazitätstest
+        //K Jeder offene Tick versucht mit 50-%-Chance eine Einfahrt, sofern noch Platz frei ist. K
         if (parkhaus.istGeoeffnet && parkhaus.geparkteAutos.length < parkhaus.kapazitaet && generateauto()) {
             const auto = generateAuto(ticks, parkhaus.geparkteAutos.map((geparkt) => geparkt.kennzeichen));
             parkhaus.geparkteAutos.push(auto);
@@ -191,6 +192,7 @@ async function main() {
                 rl.setPrompt('Kennzeichen > ');
             }
         } else if (befehl === 'einnahmen') {
+            //K Schätzt den Gesamtwert ohne Autos auszubuchen oder Einnahmen zu verändern. K
             const wertGeparkterAutosCent = parkhaus.geparkteAutos.reduce(
                 (summe, auto) => summe + berechneParkpreis(auto, parkhaus.aktuellerTick),
                 0,
@@ -292,6 +294,7 @@ function berechneParkpreis(auto: Auto, ausfahrtTick = auto.ausfahrtTick): number
     const berechneteStunden = Math.max(1, Math.ceil(parkdauerMinuten / 60));
     let preisCent = 0;
 
+    //K Jede angefangene Stunde wird berechnet; der Stundensatz sinkt in 10-Cent-Schritten bis null. K
     for (let stunde = 0; stunde < berechneteStunden; stunde++) {
         preisCent += Math.max(0, 100 - stunde * 10);
     }
@@ -312,6 +315,7 @@ function ausparken(parkhaus: Parkhaus, kennzeichen: string): { auto: Auto; preis
     const auto = parkhaus.geparkteAutos[index];
     if (!auto) return undefined;
 
+    //K Ausfahrt, Abrechnung und Wechsel zwischen geparkten und ausgefahrenen Autos erfolgen gemeinsam. K
     auto.ausfahrtTick = parkhaus.aktuellerTick;
     const preisCent = berechneParkpreis(auto);
     parkhaus.geparkteAutos.splice(index, 1);
@@ -387,6 +391,7 @@ function renderParkhausUI(data: Parkhaus): void {
     const kennzeichen = angezeigteAutos.map((auto) => auto.kennzeichen);
     const terminalZeilen = process.stdout.rows || 24;
     const gesamtKennzeichenZeilen = Math.max(1, Math.ceil(kennzeichen.length / 9));
+    //K Im Livebetrieb wird die Liste an die Terminalhöhe angepasst; in der Abrechnung erscheinen alle Kennzeichen. K
     const maximaleKennzeichenZeilen = data.mode === 'ABRECHNUNG'
         ? gesamtKennzeichenZeilen
         : Math.max(1, terminalZeilen - 19);
