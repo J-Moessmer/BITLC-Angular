@@ -63,9 +63,15 @@ async function main() {
         if (interval) clearInterval(interval);
         interval = undefined;
         parkhaus.istGeoeffnet = false;
+        const abgerechneteAutos: { auto: Auto; preisCent: number }[] = [];
         for (const auto of [...parkhaus.geparkteAutos]) {
-            ausparken(parkhaus, auto.kennzeichen);
+            const ergebnis = ausparken(parkhaus, auto.kennzeichen);
+            if (ergebnis) abgerechneteAutos.push(ergebnis);
         }
+        const letzteAusfahrt = abgerechneteAutos[abgerechneteAutos.length - 1];
+        parkhaus.statusmeldung = letzteAusfahrt
+            ? erstelleAusfahrtsmeldung(letzteAusfahrt.auto, letzteAusfahrt.preisCent)
+            : '';
         parkhaus.mode = 'ABRECHNUNG';
         parkhaus.abrechnungszeitraum = `08:00 - ${formatSimulationszeit(parkhaus.aktuellerTick)}`;
         renderParkhausUI(parkhaus);
@@ -85,12 +91,29 @@ async function main() {
             return;
         }
         //prüfung, ob geplante Parkdauer erreicht ist und auto automatisch ausparken
-        const automatischAusgeparkteAutos: { auto: Auto; preisCent: number }[] = [];
+        const automatischAusgeparkteAutos: {
+            auto: Auto;
+            preisCent: number;
+            grund: 'geplante Parkdauer' | 'hohe Auslastung';
+        }[] = [];
         for (const auto of [...parkhaus.geparkteAutos]) {
             const geplanteParkdauer = auto.geplanteParkdauerMinuten;
             if (geplanteParkdauer !== null && ticks - auto.einfahrtTick >= geplanteParkdauer) {
                 const ergebnis = ausparken(parkhaus, auto.kennzeichen);
-                if (ergebnis) automatischAusgeparkteAutos.push(ergebnis);
+                if (ergebnis) automatischAusgeparkteAutos.push({ ...ergebnis, grund: 'geplante Parkdauer' });
+            }
+        }
+
+        if (ticks % 120 === 0 && parkhaus.geparkteAutos.length / parkhaus.kapazitaet > 0.8) {
+            const maximaleAusfahrten = Math.floor(parkhaus.kapazitaet * 0.1);
+            const ausfahrkandidaten = [...parkhaus.geparkteAutos]
+                .filter((auto) => ticks - auto.einfahrtTick >= 240)
+                .sort((autoA, autoB) => autoA.einfahrtTick - autoB.einfahrtTick)
+                .slice(0, maximaleAusfahrten);
+
+            for (const auto of ausfahrkandidaten) {
+                const ergebnis = ausparken(parkhaus, auto.kennzeichen);
+                if (ergebnis) automatischAusgeparkteAutos.push({ ...ergebnis, grund: 'hohe Auslastung' });
             }
         }
 
@@ -103,10 +126,20 @@ async function main() {
         }
 
         if (automatischAusgeparkteAutos.length > 0 || autoAutomatischEingefahren) {
-            renderParkhausUI(parkhaus);
-            for (const { auto, preisCent } of automatischAusgeparkteAutos) {
-                console.log(`Geplante Parkdauer erreicht: Auto ${auto.kennzeichen} ausgefahren. Kosten: ${formatEuro(preisCent)} €.`);
+            if (automatischAusgeparkteAutos.length > 0) {
+                const letzteAusfahrt = automatischAusgeparkteAutos[automatischAusgeparkteAutos.length - 1];
+                if (letzteAusfahrt) {
+                    const wegenHoherAuslastung = letzteAusfahrt.grund === 'hohe Auslastung';
+                    parkhaus.statusmeldung = erstelleAusfahrtsmeldung(
+                        letzteAusfahrt.auto,
+                        letzteAusfahrt.preisCent,
+                        wegenHoherAuslastung,
+                    );
+                }
+            } else {
+                parkhaus.statusmeldung = 'Auto automatisch eingefahren.';
             }
+            renderParkhausUI(parkhaus);
             rl.prompt(true);
         } else {
             updateLiveParkhausUI(parkhaus);
@@ -120,8 +153,8 @@ async function main() {
             rl.setPrompt('Befehl > ');
             const ergebnis = ausparken(parkhaus, eingabe);
             if (ergebnis) {
+                parkhaus.statusmeldung = erstelleAusfahrtsmeldung(ergebnis.auto, ergebnis.preisCent);
                 renderParkhausUI(parkhaus);
-                console.log(`Auto ${ergebnis.auto.kennzeichen} ausgefahren. Kosten: ${formatEuro(ergebnis.preisCent)} €.`);
             } else {
                 console.log(`Kein geparktes Auto mit Kennzeichen ${eingabe.trim()} gefunden.`);
             }
@@ -145,8 +178,8 @@ async function main() {
             } else {
                 const auto = generateAuto(ticks, parkhaus.geparkteAutos.map((geparkt) => geparkt.kennzeichen));
                 parkhaus.geparkteAutos.push(auto);
+                parkhaus.statusmeldung = `Auto ${auto.kennzeichen} eingefahren.`;
                 renderParkhausUI(parkhaus);
-                console.log(`Auto ${auto.kennzeichen} eingefahren bei Tick ${auto.einfahrtTick}.`);
             }
         } else if (befehl === 'ausparken') {
             if (!parkhaus.istGeoeffnet) {
@@ -157,6 +190,15 @@ async function main() {
                 fragtKennzeichenAb = true;
                 rl.setPrompt('Kennzeichen > ');
             }
+        } else if (befehl === 'einnahmen') {
+            const wertGeparkterAutosCent = parkhaus.geparkteAutos.reduce(
+                (summe, auto) => summe + berechneParkpreis(auto, parkhaus.aktuellerTick),
+                0,
+            );
+            const gesamtwertCent = parkhaus.einnahmenCent + wertGeparkterAutosCent;
+            console.log(`Bereits eingenommen: ${formatEuro(parkhaus.einnahmenCent)} €`);
+            console.log(`Aktueller Wert geparkter Autos: ${formatEuro(wertGeparkterAutosCent)} €`);
+            console.log(`Gesamtwert bei Ausfahrt jetzt: ${formatEuro(gesamtwertCent)} €`);
         } else if (befehl === 'schließen' || befehl === 'schliessen' || befehl === 'ende') {
             zeigeAbrechnung();
             return;
@@ -197,6 +239,7 @@ type Parkhaus = {
 	aktuellerTick: number;
 	istGeoeffnet: boolean;
     abrechnungszeitraum?: string;
+    statusmeldung?: string;
 };
 
 
@@ -240,12 +283,12 @@ function generateAuto(einfahrtTick: number, bereitsGeparkteKennzeichen: string[]
 //M    MODUL: Preisrechnung für Parkdauer und Einnahmen    M
 //##########################################################
 
-function berechneParkpreis(auto: Auto): number {
-    if (auto.ausfahrtTick === undefined) {
+function berechneParkpreis(auto: Auto, ausfahrtTick = auto.ausfahrtTick): number {
+    if (ausfahrtTick === undefined) {
         throw new Error('Der Parkpreis kann erst nach der Ausfahrt berechnet werden.');
     }
 
-    const parkdauerMinuten = Math.max(0, auto.ausfahrtTick - auto.einfahrtTick);
+    const parkdauerMinuten = Math.max(0, ausfahrtTick - auto.einfahrtTick);
     const berechneteStunden = Math.max(1, Math.ceil(parkdauerMinuten / 60));
     let preisCent = 0;
 
@@ -280,6 +323,11 @@ function ausparken(parkhaus: Parkhaus, kennzeichen: string): { auto: Auto; preis
 
 function formatEuro(betragCent: number): string {
     return (betragCent / 100).toFixed(2).replace('.', ',');
+}
+
+function erstelleAusfahrtsmeldung(auto: Auto, preisCent: number, automatisch = false): string {
+    const automatischText = automatisch ? '(automatisch) ' : '';
+    return `+${formatEuro(preisCent)}€ Auto ${auto.kennzeichen} wurde ${automatischText}ausgeparkt`;
 }
 
 //#######################################################
@@ -337,6 +385,14 @@ function renderParkhausUI(data: Parkhaus): void {
     const contentWidth = 62; // Effektiver Raum zwischen den ║
     const angezeigteAutos = data.mode === 'BETRIEB' ? data.geparkteAutos : data.ausgefahreneAutos;
     const kennzeichen = angezeigteAutos.map((auto) => auto.kennzeichen);
+    const terminalZeilen = process.stdout.rows || 24;
+    const gesamtKennzeichenZeilen = Math.max(1, Math.ceil(kennzeichen.length / 9));
+    const maximaleKennzeichenZeilen = data.mode === 'ABRECHNUNG'
+        ? gesamtKennzeichenZeilen
+        : Math.max(1, terminalZeilen - 19);
+    const angezeigteKennzeichenZeilen = Math.min(gesamtKennzeichenZeilen, maximaleKennzeichenZeilen);
+    const angezeigteKennzeichenAnzahl = Math.min(kennzeichen.length, angezeigteKennzeichenZeilen * 9);
+    const weitereKennzeichen = data.mode === 'ABRECHNUNG' ? 0 : kennzeichen.length - angezeigteKennzeichenAnzahl;
 
     // --- 1. HEADER REIHEN ---
     console.log('╔══════════════════════════════════════════════════════════════╗');
@@ -375,13 +431,13 @@ function renderParkhausUI(data: Parkhaus): void {
 
     // Dynamische Kennzeichen-Reihen (9 Stück pro Zeile)
     const platesPerRow = 9;
-    const rowCount = Math.max(1, Math.ceil(kennzeichen.length / platesPerRow));
+    const rowCount = angezeigteKennzeichenZeilen;
 
     for (let r = 0; r < rowCount; r++) {
         const rowPlates: string[] = [];
         for (let i = 0; i < platesPerRow; i++) {
             const index = r * platesPerRow + i;
-            if (index < kennzeichen.length) {
+            if (index < angezeigteKennzeichenAnzahl) {
                 // Formatiere jedes Kennzeichen auf exakt 4 Zeichen
                 const plate = kennzeichen[index];
                 if (plate !== undefined) {
@@ -394,6 +450,11 @@ function renderParkhausUI(data: Parkhaus): void {
         const platesLineContent = rowPlates.join(' | ');
         const fullRow = platesLineContent;
         console.log(`║ ${fullRow.padEnd(contentWidth - 2)} ║`);
+    }
+
+    if (weitereKennzeichen > 0) {
+        const weitereZeile = `... und ${weitereKennzeichen} weitere Kennzeichen`;
+        console.log(`║ ${weitereZeile.padEnd(contentWidth - 2)} ║`);
     }
 
     // Leere Zeile laut Design
@@ -423,6 +484,8 @@ function renderParkhausUI(data: Parkhaus): void {
     const footerPadLeft = Math.floor((contentWidth - footerStr.length) / 2);
     const footerPadRight = contentWidth - footerStr.length - footerPadLeft;
     console.log(`║${' '.repeat(footerPadLeft)}${footerStr}${' '.repeat(footerPadRight)}║`);
+    const statusmeldung = (data.statusmeldung ?? '').slice(0, contentWidth - 2);
+    console.log(`║ ${statusmeldung.padEnd(contentWidth - 2)} ║`);
 
     if (data.mode === 'ABRECHNUNG') {
         // Die Abrechnung hat laut deinem Design unter den Einnahmen noch eine Leerzeile
@@ -453,7 +516,7 @@ function updateLiveParkhausUI(data: Parkhaus): void {
     const footerPadRight = contentWidth - footer.length - footerPadLeft;
     const footerLine = `║${' '.repeat(footerPadLeft)}${footer}${' '.repeat(footerPadRight)}║`;
 
-    // Nur Status und Uhrzeit aktualisieren; Cursor und Eingabezeile bleiben unangetastet.
+    // Nur Status und Uhrzeit aktualisieren, ohne den UI-Frame neu aufzubauen.
     process.stdout.write('\x1b[s');
     process.stdout.write(`\x1b[4;1H\x1b[2K${statusLine}`);
     process.stdout.write(`\x1b[${12 + rowCount};1H\x1b[2K${footerLine}`);
