@@ -13,7 +13,9 @@
 
 ## Überblick
 
-Die Parkhaus-Simulation ist ein TypeScript-Lernprojekt für das Terminal. Sie stellt eine Parkhausuhr, zufällige und manuelle Einfahrten, Ausfahrten, Gebühren und eine Endabrechnung dar. Die Terminaloberfläche wird mit ANSI-Steuerzeichen aktualisiert.
+Die Parkhaus-Simulation ist ein TypeScript-Lernprojekt mit einer Terminalversion und einer interaktiven Browserversion. Beide Varianten stellen eine Parkhausuhr, zufällige und manuelle Einfahrten, Ausfahrten, Gebühren und eine Endabrechnung dar.
+
+Die Browserversion kann direkt auf GitHub Pages geöffnet werden: [Parkhaus online](./index.html).
 
 ## Voraussetzungen und Start
 
@@ -29,6 +31,14 @@ Danach im Parkhaus-Ordner starten:
 cd "Typescript intro/Parkhaus"
 npx ts-node Parkhaus.ts
 ```
+
+Für die Browserversion wird TypeScript aus dem Repository-Hauptverzeichnis kompiliert:
+
+```bash
+npm run build:parkhaus
+```
+
+Anschließend `index.html` im Browser öffnen. Auf GitHub Pages wird die statische Seite unter `Typescript intro/Parkhaus/` bereitgestellt.
 
 Beim ersten Aufruf kann `npx` fragen, ob `ts-node` temporär heruntergeladen werden soll. Alternativ lässt sich die TypeScript-Konfiguration prüfen:
 
@@ -93,6 +103,8 @@ Der Befehl `Einnahmen` berechnet den aktuellen Preis jedes noch geparkten Autos 
 ## Projektstruktur
 
 - `Parkhaus.ts` – Terminal-App, Parkhausmodell, Tick-Logik, Ein-/Ausfahrten, Preisberechnung und ANSI-UI
+- `index.html` und `Parkhaus ONLINE.ts` – Browseroberfläche und browserbasierte Simulation
+- `tsconfig.browser.json` – TypeScript-Konfiguration für die statische Browserdatei
 - `tsconfig.json` – TypeScript-Konfiguration für das Parkhaus
 - `Plannung/Projektplan.md` – Aufgabenstellung und fachliche Planung
 - `assets/` – Projektressourcen

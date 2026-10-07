@@ -2,6 +2,7 @@
   "scripts": {
     "start": "node \"Javascript intro/Taschenrechner/index.js\"",
     "build:typescript": "tsc -p \"Typescript intro/Taschenrechner - Typescript/tsconfig.node.json\" && tsc -p \"Typescript intro/Taschenrechner - Typescript/tsconfig.browser.json\"",
+    "build:parkhaus": "tsc -p \"Typescript intro/Parkhaus/tsconfig.browser.json\"",
     "start:typescript": "npm run build:typescript && node \"Typescript intro/Taschenrechner - Typescript/index.js\""
   },
   "dependencies": {

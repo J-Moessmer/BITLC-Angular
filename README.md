@@ -48,6 +48,13 @@ Die zentrale Projektübersicht befindet sich in der [Haupt-Landingpage](./index.
 - **Beschreibung:** TypeScript-Version des Taschenrechners mit Konsolen- und Browserausgabe.
 - **Schwerpunkte:** Union-Typen, strikte Typprüfung, Node.js- und DOM-Konfiguration sowie Kompilierung für GitHub Pages.
 
+### 5. TypeScript – Parkhaus-Simulation
+
+- **Ordner:** [Typescript intro/Parkhaus](./Typescript%20intro/Parkhaus/)
+- **Browserseite:** [Parkhaus online](./Typescript%20intro/Parkhaus/index.html)
+- **Beschreibung:** Interaktive Parkhaus-Simulation mit Live-Belegung, manuellen Aktionen und Tagesabrechnung.
+- **Live ansehen:** <https://j-moessmer.github.io/BITLC-Angular/Typescript%20intro/Parkhaus/>
+
 ## Repository-Struktur
 
 ```text
@@ -145,3 +152,4 @@ Direkte Projektlinks:
 
 - [VogelFinder HTML5](https://j-moessmer.github.io/BITLC-Angular/vogel-atlas-html/)
 - [VogelFinder HTML + CSS](https://j-moessmer.github.io/BITLC-Angular/vogel-atlas-htmlcss/)
+- [Parkhaus-Simulation](https://j-moessmer.github.io/BITLC-Angular/Typescript%20intro/Parkhaus/)
