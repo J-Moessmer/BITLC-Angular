@@ -17,9 +17,15 @@ const spaces = element('spaces');
 const openButton = element('openButton');
 const finishButton = element('finishButton');
 const parkButton = element('parkButton');
-const carSelect = element('carSelect');
-const unparkButton = element('unparkButton');
 const resetButton = element('resetButton');
+const carDetails = element('carDetails');
+const selectedPlateOutput = element('selectedPlate');
+const carEntryTime = element('carEntryTime');
+const carDuration = element('carDuration');
+const carPlannedExit = element('carPlannedExit');
+const carCurrentPrice = element('carCurrentPrice');
+const closeCarDetailsButton = element('closeCarDetails');
+const selectedExitButton = element('selectedExitButton');
 const revenueOutput = element('revenue');
 const estimatedRevenueOutput = element('estimatedRevenue');
 const activityList = element('activityList');
@@ -34,6 +40,7 @@ let revenueCent = 0;
 let currentTick = 0;
 let isOpen = false;
 let isFinished = false;
+let selectedCarPlate = null;
 let intervalId;
 let eventTotal = 0;
 function formatTime(tick) {
@@ -42,6 +49,11 @@ function formatTime(tick) {
 }
 function formatEuro(cents) {
     return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(cents / 100);
+}
+function formatDuration(minutes) {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return hours > 0 ? `${hours} Std. ${String(remainingMinutes).padStart(2, '0')} Min.` : `${remainingMinutes} Min.`;
 }
 function calculatePrice(car, exitTick) {
     const duration = Math.max(0, exitTick - car.einfahrtTick);
@@ -87,6 +99,8 @@ function exitCar(plate, automatic = false) {
     parkedCars.splice(index, 1);
     receipts.push(receipt);
     revenueCent += receipt.preisCent;
+    if (selectedCarPlate === plate)
+        selectedCarPlate = null;
     addEvent(`${automatic ? 'Automatische Ausfahrt' : 'Ausfahrt'} · ${car.kennzeichen} · ${formatEuro(receipt.preisCent)}`);
     return receipt;
 }
@@ -160,18 +174,27 @@ function render() {
         : isOpen
             ? 'Automatische Ein- und Ausfahrten sind aktiv.'
             : 'Konfiguriere das Parkhaus und starte den Betrieb.';
-    const carsByPlate = new Map(parkedCars.map((car) => [car.kennzeichen, car]));
     spaces.replaceChildren();
     for (let index = 0; index < capacity; index++) {
-        const slot = document.createElement('div');
+        const slot = document.createElement('button');
+        slot.type = 'button';
+        slot.className = 'space';
         const car = parkedCars[index];
-        slot.className = car ? 'space occupied' : 'space';
-        slot.setAttribute('aria-label', car ? `Platz ${index + 1}, Kennzeichen ${car.kennzeichen}` : `Platz ${index + 1}, frei`);
+        slot.disabled = !car || !isOpen;
+        slot.setAttribute('aria-label', car
+            ? `Auto ${car.kennzeichen} auf Platz ${index + 1} ausparken`
+            : `Platz ${index + 1}, frei`);
         const number = document.createElement('span');
         number.className = 'space-number';
         number.textContent = String(index + 1).padStart(2, '0');
         slot.append(number);
         if (car) {
+            slot.classList.add('occupied');
+            slot.dataset.plate = car.kennzeichen;
+            slot.setAttribute('aria-pressed', String(selectedCarPlate === car.kennzeichen));
+            if (selectedCarPlate === car.kennzeichen)
+                slot.classList.add('selected');
+            slot.title = `Details für Auto ${car.kennzeichen} anzeigen`;
             const plate = document.createElement('strong');
             plate.textContent = car.kennzeichen;
             slot.append(plate);
@@ -183,27 +206,22 @@ function render() {
         }
         spaces.append(slot);
     }
-    carSelect.replaceChildren();
-    if (parkedCars.length === 0) {
-        const option = document.createElement('option');
-        option.value = '';
-        option.textContent = 'Keine Autos geparkt';
-        carSelect.append(option);
-    }
-    else {
-        for (const car of parkedCars) {
-            const option = document.createElement('option');
-            option.value = car.kennzeichen;
-            option.textContent = `${car.kennzeichen} · seit ${formatTime(car.einfahrtTick)}`;
-            carSelect.append(option);
-        }
+    const selectedCar = parkedCars.find((car) => car.kennzeichen === selectedCarPlate);
+    carDetails.hidden = !selectedCar || !isOpen;
+    if (selectedCar && isOpen) {
+        const duration = currentTick - selectedCar.einfahrtTick;
+        selectedPlateOutput.textContent = selectedCar.kennzeichen;
+        carEntryTime.textContent = formatTime(selectedCar.einfahrtTick);
+        carDuration.textContent = formatDuration(duration);
+        const plannedExitTick = Math.min(14 * 60, selectedCar.einfahrtTick + selectedCar.geplanteParkdauerMinuten);
+        carPlannedExit.textContent = formatTime(plannedExitTick);
+        carCurrentPrice.textContent = formatEuro(calculatePrice(selectedCar, currentTick));
+        selectedExitButton.disabled = !isOpen || isFinished;
     }
     const canOperate = isOpen && !isFinished;
     openButton.disabled = canOperate || isFinished;
     finishButton.disabled = !canOperate;
     parkButton.disabled = !canOperate || parkedCount >= capacity;
-    carSelect.disabled = !canOperate || parkedCount === 0;
-    unparkButton.disabled = !canOperate || parkedCount === 0;
     capacityInput.disabled = canOperate || isFinished;
     speedInput.disabled = canOperate || isFinished;
     resetButton.hidden = !isFinished;
@@ -224,9 +242,29 @@ openButton.addEventListener('click', () => {
 });
 finishButton.addEventListener('click', finishDay);
 parkButton.addEventListener('click', () => parkCar());
-unparkButton.addEventListener('click', () => {
-    if (carSelect.value) {
-        exitCar(carSelect.value);
+spaces.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof Element))
+        return;
+    const slot = target.closest('button[data-plate]');
+    if (!slot || !isOpen)
+        return;
+    const plate = slot.dataset.plate;
+    if (plate) {
+        selectedCarPlate = selectedCarPlate === plate ? null : plate;
+        render();
+        if (selectedCarPlate) {
+            spaces.querySelector(`button[data-plate="${selectedCarPlate}"]`)?.focus();
+        }
+    }
+});
+closeCarDetailsButton.addEventListener('click', () => {
+    selectedCarPlate = null;
+    render();
+});
+selectedExitButton.addEventListener('click', () => {
+    if (selectedCarPlate && isOpen) {
+        exitCar(selectedCarPlate);
         render();
     }
 });
@@ -238,6 +276,7 @@ resetButton.addEventListener('click', () => {
     currentTick = 0;
     isOpen = false;
     isFinished = false;
+    selectedCarPlate = null;
     eventTotal = 0;
     activityList.replaceChildren();
     eventCount.textContent = '0 Ereignisse';

@@ -127,13 +127,18 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 0;
             border: 1px dashed #bdc7bd;
             background: #f8f8f3;
             color: #8b978f;
             font-size: .68rem;
+            font-family: inherit;
         }
         .space-number { font-size: .65rem; }
-        .space.occupied { border: 1px solid #a5c7af; background: var(--green-light); color: var(--ink); }
+        .space.occupied { border: 1px solid #a5c7af; background: var(--green-light); color: var(--ink); cursor: pointer; }
+        .space.occupied:hover:not(:disabled) { border-color: var(--green); background: #cbe2d2; transform: translateY(-1px); }
+        .space.selected { border: 2px solid var(--green); box-shadow: 0 0 0 2px var(--yellow); }
+        .space:disabled { opacity: 1; }
         .space.occupied strong { margin-top: .3rem; font-size: .82rem; font-variant-numeric: tabular-nums; }
         .lot-legend { display: flex; gap: 1rem; margin-top: 1rem; color: var(--muted); font-size: .78rem; }
         .legend-item { display: flex; align-items: center; gap: .4rem; }
@@ -155,8 +160,6 @@
             background: #fffefa;
         }
         .button-row { display: flex; gap: .6rem; margin-bottom: .65rem; }
-        .parking-exit { flex: 1; }
-        .unpark-action { align-self: end; }
         .button-row button { flex: 1; }
         .action {
             min-height: 42px;
@@ -182,6 +185,16 @@
         .total span { display: block; margin-bottom: .25rem; color: var(--muted); font-size: .75rem; }
         .total strong { font-size: 1.35rem; font-variant-numeric: tabular-nums; }
 
+        .car-details { margin-top: 1.25rem; padding: 1.25rem; border: 1px solid var(--line); border-left: 4px solid var(--green); background: var(--surface); box-shadow: var(--shadow); }
+        .car-details-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        .car-details-header h2 { font-family: Georgia, "Times New Roman", serif; font-size: 1.45rem; font-weight: 500; }
+        .close-selection { width: 36px; height: 36px; border: 1px solid var(--line); color: var(--muted); background: transparent; font-size: 1.25rem; }
+        .car-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; margin: 1rem 0; }
+        .car-stat { min-width: 0; padding: .75rem; background: #f5f6f0; }
+        .car-stat dt { margin-bottom: .35rem; color: var(--muted); font-size: .73rem; }
+        .car-stat dd { margin: 0; overflow-wrap: anywhere; font-weight: 700; font-variant-numeric: tabular-nums; }
+        .car-details-actions { display: flex; justify-content: flex-end; }
+
         .activity { margin-top: 1.25rem; padding: 1.15rem 1.25rem; }
         .activity-list { display: grid; gap: .45rem; margin: .9rem 0 0; padding: 0; list-style: none; }
         .activity-list li { display: flex; justify-content: space-between; gap: 1rem; padding: .55rem 0; border-top: 1px solid #edf0e9; color: var(--muted); font-size: .86rem; }
@@ -204,6 +217,7 @@
             .dashboard { grid-template-columns: 1fr; }
             .lot { min-height: auto; }
             .spaces { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); }
+            .car-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
 
         @media (max-width: 440px) {
@@ -279,14 +293,6 @@
                     <div class="button-row">
                         <button id="parkButton" class="action secondary" type="button" disabled>Auto einfahren</button>
                     </div>
-                    <div class="button-row">
-                        <label class="parking-exit">Kennzeichen ausfahren
-                            <select id="carSelect" aria-label="Geparktes Kennzeichen auswählen" disabled>
-                                <option value="">Keine Autos geparkt</option>
-                            </select>
-                        </label>
-                        <button id="unparkButton" class="action secondary unpark-action" type="button" disabled>Ausfahren</button>
-                    </div>
                     <button id="resetButton" class="action secondary full-button" type="button" hidden>Neuen Betriebstag starten</button>
                 </section>
 
@@ -298,6 +304,22 @@
                 </section>
             </div>
         </div>
+
+        <section id="carDetails" class="car-details" aria-labelledby="carDetailsTitle" hidden>
+            <div class="car-details-header">
+                <h2 id="carDetailsTitle">Fahrzeugdetails · <span id="selectedPlate"></span></h2>
+                <button id="closeCarDetails" class="close-selection" type="button" aria-label="Fahrzeugauswahl schließen" title="Auswahl schließen">×</button>
+            </div>
+            <dl class="car-stats">
+                <div class="car-stat"><dt>Eingefahren</dt><dd id="carEntryTime"></dd></div>
+                <div class="car-stat"><dt>Standzeit</dt><dd id="carDuration"></dd></div>
+                <div class="car-stat"><dt>Geplante Ausfahrt</dt><dd id="carPlannedExit"></dd></div>
+                <div class="car-stat"><dt>Preis bei Ausfahrt jetzt</dt><dd id="carCurrentPrice"></dd></div>
+            </dl>
+            <div class="car-details-actions">
+                <button id="selectedExitButton" class="action" type="button">Auto ausparken</button>
+            </div>
+        </section>
 
         <section class="activity" aria-labelledby="activityTitle">
             <div class="section-heading"><h2 id="activityTitle">Betriebsprotokoll</h2><span id="eventCount" class="occupancy">0 Ereignisse</span></div>
@@ -311,6 +333,6 @@
         </section>
     </main>
 
-    <script src="./Parkhaus%20ONLINE.js"></script>
+    <script src="./Parkhaus%20ONLINE.js?v=3"></script>
 </body>
 </html>
