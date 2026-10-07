@@ -151,6 +151,49 @@ img {
     border-radius: 0.65rem;
 }
 
+main #seiteninhalt > fieldset > table img {
+    width: 180px;
+    min-width: 180px;
+    max-width: 180px;
+    height: 180px;
+    object-fit: cover;
+    object-position: center;
+}
+
+main #seiteninhalt > fieldset > table img[src*="Common_Blackbird"] {
+    object-position: 26% center;
+}
+
+main #seiteninhalt > fieldset > .bird-selection-grid {
+    border-spacing: 10px;
+}
+
+main #seiteninhalt > fieldset > .bird-selection-grid td {
+    text-align: center;
+    vertical-align: top;
+}
+
+.blog-entry-layout {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.blog-entry-layout td {
+    vertical-align: top;
+}
+
+.blog-entry-layout img {
+    width: auto;
+    max-width: 180px;
+    height: 128px;
+    object-fit: contain;
+}
+
+.blog-entry-layout .blog-entry-copy {
+    padding-left: 15px;
+    vertical-align: middle;
+}
+
 hr {
     border: 0;
     border-top: 1px solid var(--border);

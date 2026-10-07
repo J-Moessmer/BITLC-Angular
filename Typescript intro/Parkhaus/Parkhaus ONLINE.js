@@ -18,6 +18,7 @@ const openButton = element('openButton');
 const finishButton = element('finishButton');
 const parkButton = element('parkButton');
 const resetButton = element('resetButton');
+const languageSelect = element('languageSelect');
 const carDetails = element('carDetails');
 const selectedPlateOutput = element('selectedPlate');
 const carEntryTime = element('carEntryTime');
@@ -43,17 +44,129 @@ let isFinished = false;
 let selectedCarPlate = null;
 let intervalId;
 let eventTotal = 0;
+let activeLanguage = 'de';
+let translations = {};
+let germanTranslations = {};
+const translationCache = {};
+let activityEvents = [];
+function translate(key, values = {}) {
+    const template = translations[key] ?? germanTranslations[key] ?? key;
+    return template.replace(/\{(\w+)\}/g, (placeholder, name) => String(values[name] ?? placeholder));
+}
+async function fetchTranslations(language) {
+    const response = await fetch(`../../${language}.lang?v=1`);
+    if (!response.ok)
+        throw new Error(`Sprachdatei ${language}.lang konnte nicht geladen werden.`);
+    const data = await response.json();
+    if (!data || typeof data !== 'object' || Array.isArray(data)) {
+        throw new Error(`Sprachdatei ${language}.lang hat ein ungültiges Format.`);
+    }
+    if (Object.values(data).some((value) => typeof value !== 'string')) {
+        throw new Error(`Sprachdatei ${language}.lang enthält ungültige Übersetzungen.`);
+    }
+    return data;
+}
+function applyStaticTranslations() {
+    document.documentElement.lang = activeLanguage;
+    document.title = translate('documentTitle');
+    document.querySelector('meta[name="description"]')?.setAttribute('content', translate('metaDescription'));
+    document.querySelectorAll('[data-i18n]').forEach((node) => {
+        const key = node.dataset.i18n;
+        if (key)
+            node.textContent = translate(key);
+    });
+    document.querySelectorAll('[data-i18n-aria]').forEach((node) => {
+        const key = node.dataset.i18nAria;
+        if (key)
+            node.setAttribute('aria-label', translate(key));
+    });
+    document.querySelectorAll('[data-i18n-title]').forEach((node) => {
+        const key = node.dataset.i18nTitle;
+        if (key)
+            node.title = translate(key);
+    });
+    document.querySelectorAll('[data-i18n-content]').forEach((node) => {
+        const key = node.dataset.i18nContent;
+        if (key)
+            node.content = translate(key);
+    });
+}
+async function setLanguage(language) {
+    try {
+        const catalog = translationCache[language] ?? await fetchTranslations(language);
+        translationCache[language] = catalog;
+        translations = catalog;
+        activeLanguage = language;
+        try {
+            localStorage.setItem('project-language', language);
+        }
+        catch {
+            // Storage may be unavailable in private browsing contexts.
+        }
+        languageSelect.value = language;
+        applyStaticTranslations();
+        render();
+        renderActivity();
+        if (isFinished)
+            renderBilling();
+    }
+    catch (error) {
+        languageSelect.value = activeLanguage;
+        console.error(error);
+    }
+}
+async function initializeLanguage() {
+    languageSelect.disabled = true;
+    let preferredLanguage = 'de';
+    try {
+        preferredLanguage = localStorage.getItem('project-language') === 'en' ? 'en' : 'de';
+    }
+    catch {
+        preferredLanguage = 'de';
+    }
+    try {
+        germanTranslations = await fetchTranslations('de');
+        translationCache.de = germanTranslations;
+        translations = germanTranslations;
+        if (preferredLanguage === 'en') {
+            try {
+                translations = await fetchTranslations('en');
+                translationCache.en = translations;
+                activeLanguage = 'en';
+            }
+            catch (error) {
+                console.error(error);
+                activeLanguage = 'de';
+            }
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+    languageSelect.value = activeLanguage;
+    languageSelect.disabled = false;
+    applyStaticTranslations();
+    render();
+    renderActivity();
+}
 function formatTime(tick) {
     const minutes = 8 * 60 + tick;
     return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
 }
 function formatEuro(cents) {
-    return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(cents / 100);
+    const locale = activeLanguage === 'de' ? 'de-DE' : 'en-GB';
+    return new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(cents / 100);
 }
 function formatDuration(minutes) {
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
-    return hours > 0 ? `${hours} Std. ${String(remainingMinutes).padStart(2, '0')} Min.` : `${remainingMinutes} Min.`;
+    if (hours === 0) {
+        const unit = translate(remainingMinutes === 1 ? 'duration.minuteOne' : 'duration.minuteMany');
+        return `${remainingMinutes} ${unit}`;
+    }
+    const hourUnit = translate(hours === 1 ? 'duration.hourOne' : 'duration.hourMany');
+    const minuteUnit = translate(remainingMinutes === 1 ? 'duration.minuteOne' : 'duration.minuteMany');
+    return `${hours} ${hourUnit} ${String(remainingMinutes).padStart(2, '0')} ${minuteUnit}`;
 }
 function calculatePrice(car, exitTick) {
     const duration = Math.max(0, exitTick - car.einfahrtTick);
@@ -75,18 +188,53 @@ function createCar() {
         geplanteParkdauerMinuten: Math.floor(Math.random() * 1440) + 1,
     };
 }
-function addEvent(message) {
+function renderActivity() {
+    activityList.replaceChildren();
+    const entries = activityEvents.length > 0
+        ? [...activityEvents].reverse().slice(0, 6)
+        : [{ key: 'event.ready', tick: 0 }];
+    for (const entry of entries) {
+        const row = document.createElement('li');
+        const text = document.createElement('span');
+        const time = document.createElement('time');
+        text.textContent = translate(entry.key, {
+            plate: entry.plate ?? '',
+            price: formatEuro(entry.priceCent ?? 0),
+        });
+        time.textContent = formatTime(entry.tick);
+        row.append(text, time);
+        activityList.append(row);
+    }
+    const countKey = eventTotal === 1 ? 'eventCount.one' : 'eventCount.many';
+    eventCount.textContent = translate(countKey, { count: eventTotal });
+}
+function addEvent(key, plate, priceCent) {
+    const entry = { key, tick: currentTick };
+    if (plate !== undefined)
+        entry.plate = plate;
+    if (priceCent !== undefined)
+        entry.priceCent = priceCent;
+    activityEvents.push(entry);
     eventTotal++;
-    const row = document.createElement('li');
-    const text = document.createElement('span');
-    const time = document.createElement('time');
-    text.textContent = message;
-    time.textContent = formatTime(currentTick);
-    row.append(text, time);
-    activityList.prepend(row);
-    while (activityList.children.length > 6)
-        activityList.lastElementChild?.remove();
-    eventCount.textContent = `${eventTotal} ${eventTotal === 1 ? 'Ereignis' : 'Ereignisse'}`;
+    renderActivity();
+}
+function renderBilling() {
+    const summaryKey = receipts.length === 1 ? 'billing.summary.one' : 'billing.summary.many';
+    billingSummary.textContent = translate(summaryKey, {
+        count: receipts.length,
+        revenue: formatEuro(revenueCent),
+        time: formatTime(currentTick),
+    });
+    billingList.replaceChildren();
+    for (const receipt of receipts) {
+        const item = document.createElement('li');
+        item.textContent = translate('billing.receipt', {
+            plate: receipt.auto.kennzeichen,
+            time: formatTime(receipt.ausfahrtTick),
+            price: formatEuro(receipt.preisCent),
+        });
+        billingList.append(item);
+    }
 }
 function exitCar(plate, automatic = false) {
     const index = parkedCars.findIndex((car) => car.kennzeichen === plate);
@@ -101,7 +249,7 @@ function exitCar(plate, automatic = false) {
     revenueCent += receipt.preisCent;
     if (selectedCarPlate === plate)
         selectedCarPlate = null;
-    addEvent(`${automatic ? 'Automatische Ausfahrt' : 'Ausfahrt'} · ${car.kennzeichen} · ${formatEuro(receipt.preisCent)}`);
+    addEvent(automatic ? 'event.automaticExit' : 'event.manualExit', car.kennzeichen, receipt.preisCent);
     return receipt;
 }
 function parkCar(automatic = false) {
@@ -109,7 +257,7 @@ function parkCar(automatic = false) {
         return;
     const car = createCar();
     parkedCars.push(car);
-    addEvent(`${automatic ? 'Automatische Einfahrt' : 'Einfahrt'} · ${car.kennzeichen}`);
+    addEvent(automatic ? 'event.automaticEntry' : 'event.manualEntry', car.kennzeichen);
     render();
 }
 function runTick() {
@@ -146,65 +294,74 @@ function finishDay() {
     isFinished = true;
     for (const car of [...parkedCars])
         exitCar(car.kennzeichen, true);
-    addEvent('Betriebstag abgerechnet.');
+    addEvent('event.finish');
     billing.hidden = false;
-    billingSummary.textContent = `${receipts.length} Fahrzeuge · ${formatEuro(revenueCent)} Einnahmen · Abrechnung um ${formatTime(currentTick)} Uhr`;
-    billingList.replaceChildren();
-    for (const receipt of receipts) {
-        const item = document.createElement('li');
-        item.textContent = `${receipt.auto.kennzeichen} · ${formatTime(receipt.ausfahrtTick)} · ${formatEuro(receipt.preisCent)}`;
-        billingList.append(item);
-    }
+    renderBilling();
     render();
+}
+function createParkingSlot(index) {
+    const slot = document.createElement('button');
+    slot.type = 'button';
+    slot.className = 'space';
+    const number = document.createElement('span');
+    number.className = 'space-number';
+    number.textContent = String(index + 1).padStart(2, '0');
+    const plate = document.createElement('strong');
+    plate.className = 'space-plate';
+    const free = document.createElement('span');
+    free.className = 'space-free';
+    free.textContent = 'FREI';
+    slot.append(number, plate, free);
+    spaces.append(slot);
+    return slot;
 }
 function render() {
     const parkedCount = parkedCars.length;
     const percentage = Math.round((parkedCount / capacity) * 100);
     clock.textContent = formatTime(currentTick);
     statusStrip.dataset.open = String(isOpen);
-    statusText.textContent = isOpen ? 'OFFEN' : isFinished ? 'ABGERECHNET' : 'GESCHLOSSEN';
-    occupancy.textContent = `${parkedCount} von ${capacity} Plätzen · ${percentage} %`;
+    statusText.textContent = translate(isOpen ? 'status.open' : isFinished ? 'status.finished' : 'status.closed');
+    occupancy.textContent = translate('occupancy', { occupied: parkedCount, capacity, percent: percentage });
     progressTrack.max = capacity;
     progressTrack.value = parkedCount;
     revenueOutput.textContent = formatEuro(revenueCent);
     const estimated = parkedCars.reduce((total, car) => total + calculatePrice(car, currentTick), revenueCent);
     estimatedRevenueOutput.textContent = formatEuro(estimated);
-    statusMessage.textContent = isFinished
-        ? 'Der Betriebstag ist abgeschlossen.'
+    statusMessage.textContent = translate(isFinished
+        ? 'status.complete'
         : isOpen
-            ? 'Automatische Ein- und Ausfahrten sind aktiv.'
-            : 'Konfiguriere das Parkhaus und starte den Betrieb.';
-    spaces.replaceChildren();
-    for (let index = 0; index < capacity; index++) {
-        const slot = document.createElement('button');
-        slot.type = 'button';
-        slot.className = 'space';
+            ? 'status.running'
+            : 'status.ready');
+    const slots = Array.from(spaces.querySelectorAll('.space'));
+    while (slots.length < capacity)
+        slots.push(createParkingSlot(slots.length));
+    while (slots.length > capacity)
+        slots.pop()?.remove();
+    for (const [index, slot] of slots.entries()) {
         const car = parkedCars[index];
         slot.disabled = !car || !isOpen;
+        slot.classList.toggle('occupied', Boolean(car));
+        slot.classList.toggle('selected', Boolean(car && selectedCarPlate === car.kennzeichen));
         slot.setAttribute('aria-label', car
-            ? `Auto ${car.kennzeichen} auf Platz ${index + 1} ausparken`
-            : `Platz ${index + 1}, frei`);
-        const number = document.createElement('span');
-        number.className = 'space-number';
-        number.textContent = String(index + 1).padStart(2, '0');
-        slot.append(number);
+            ? translate('tile.select', { plate: car.kennzeichen, space: index + 1 })
+            : translate('tile.free', { space: index + 1 }));
+        slot.setAttribute('aria-pressed', String(Boolean(car && selectedCarPlate === car.kennzeichen)));
         if (car) {
-            slot.classList.add('occupied');
             slot.dataset.plate = car.kennzeichen;
-            slot.setAttribute('aria-pressed', String(selectedCarPlate === car.kennzeichen));
-            if (selectedCarPlate === car.kennzeichen)
-                slot.classList.add('selected');
-            slot.title = `Details für Auto ${car.kennzeichen} anzeigen`;
-            const plate = document.createElement('strong');
-            plate.textContent = car.kennzeichen;
-            slot.append(plate);
+            slot.title = translate('tile.title', { plate: car.kennzeichen });
         }
         else {
-            const free = document.createElement('span');
-            free.textContent = 'FREI';
-            slot.append(free);
+            delete slot.dataset.plate;
+            slot.title = '';
         }
-        spaces.append(slot);
+        const plateLabel = slot.querySelector('.space-plate');
+        const freeLabel = slot.querySelector('.space-free');
+        if (plateLabel)
+            plateLabel.textContent = car?.kennzeichen ?? '';
+        if (freeLabel) {
+            freeLabel.hidden = Boolean(car);
+            freeLabel.textContent = translate('free');
+        }
     }
     const selectedCar = parkedCars.find((car) => car.kennzeichen === selectedCarPlate);
     carDetails.hidden = !selectedCar || !isOpen;
@@ -229,14 +386,14 @@ function render() {
 openButton.addEventListener('click', () => {
     const requestedCapacity = Number(capacityInput.value);
     if (!Number.isInteger(requestedCapacity) || requestedCapacity < 1 || requestedCapacity > 100) {
-        capacityInput.setCustomValidity('Bitte eine ganze Zahl zwischen 1 und 100 eingeben.');
+        capacityInput.setCustomValidity(translate('validation.capacity'));
         capacityInput.reportValidity();
         return;
     }
     capacityInput.setCustomValidity('');
     capacity = requestedCapacity;
     isOpen = true;
-    addEvent('Parkhaus geöffnet.');
+    addEvent('event.open');
     intervalId = window.setInterval(runTick, 60000 / Number(speedInput.value));
     render();
 });
@@ -278,10 +435,13 @@ resetButton.addEventListener('click', () => {
     isFinished = false;
     selectedCarPlate = null;
     eventTotal = 0;
-    activityList.replaceChildren();
-    eventCount.textContent = '0 Ereignisse';
+    activityEvents = [];
     billing.hidden = true;
-    addEvent('Neuer Betriebstag bereit.');
+    addEvent('event.newDay');
     render();
 });
-render();
+languageSelect.addEventListener('change', () => {
+    void setLanguage(languageSelect.value === 'en' ? 'en' : 'de');
+});
+capacityInput.addEventListener('input', () => capacityInput.setCustomValidity(''));
+void initializeLanguage();

@@ -18,7 +18,9 @@ Beschreibung:  Wiederverwendbares HTML-Seiten-Template mit einheitlichem Header,
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Seitentitel anpassen -->
     <title>Seitentitel - VogelFinder</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=2">
+    <link rel="stylesheet" href="../language.css">
+    <script src="../language.js?v=3" defer></script>
 </head>
 
 <body>
@@ -58,7 +60,7 @@ Beschreibung:  Wiederverwendbares HTML-Seiten-Template mit einheitlichem Header,
         <tbody>
             <tr>
                 <!-- Sidebar / Navigation (Einheitlich über die gesamte Seite) -->
-                <td valign="top">
+                <td>
                     <nav aria-label="Hauptnavigation">
                         <h3>Navigation</h3>
                         <ul>
@@ -72,7 +74,7 @@ Beschreibung:  Wiederverwendbares HTML-Seiten-Template mit einheitlichem Header,
                 </td>
 
                 <!-- Hauptinhalt (Nur dieser Block ändert sich je Seite) -->
-                <td valign="top">
+                <td>
                     <main>
                         <!-- ============================================== -->
                         <!-- START: SEITENSPEZIFISCHER INHALT (CONTENT BLOCK)-->
@@ -89,19 +91,21 @@ Beschreibung:  Wiederverwendbares HTML-Seiten-Template mit einheitlichem Header,
                                             <h2>Herbzug der kraniche Hat begonnen</h2>
                                         </legend>
                                         <!--Table benutzen, damit text und bild richtig aligned sind, ohne table geht das nicht, grrrrr-->
-                                        <table border="0" cellpadding="0" cellspacing="0">
+                                        <table class="blog-entry-layout">
+                                            <tbody>
                                             <tr>
                                                 <!-- Linke Spalte: Das Bild -->
-                                                <td valign="top">
+                                                <td>
                                                     <img src="Assets/Common_crane_grus_grus.jpg"
                                                         alt="Bild eines Kranichs" height="128">
                                                 </td>
                                                 <!-- Rechte Spalte: Der Text beginnt ganz oben auf Bildhöhe -->
-                                                <td valign="center" style="padding-left: 15px;">
+                                                <td class="blog-entry-copy">
                                                     Zehntausende Kraniche sammeln sich derzeit in den
                                                     Rastgebieten im Norden und Osten Deutschlands...
                                                 </td>
                                             </tr>
+                                            </tbody>
                                         </table>
                                     </fieldset>
                                     <fieldset>
@@ -109,15 +113,16 @@ Beschreibung:  Wiederverwendbares HTML-Seiten-Template mit einheitlichem Header,
                                             <h2>Heimische Vielfalt: Wer flattert durch unsere Gärten?</h2>
                                         </legend>
                                         <!--Table benutzen, damit text und bild richtig aligned sind, ohne table geht das nicht, grrrrr-->
-                                        <table border="0" cellpadding="0" cellspacing="0">
+                                        <table class="blog-entry-layout">
+                                            <tbody>
                                             <tr>
                                                 <!-- Linke Spalte: Das Bild -->
-                                                <td valign="top">
+                                                <td>
                                                     <img src="Assets/Robin_(9509442456).jpg" alt="Bild eines Kranichs"
                                                         height="128">
                                                 </td>
                                                 <!-- Rechte Spalte: Der Text beginnt ganz oben auf Bildhöhe -->
-                                                <td valign="center" style="padding-left: 15px;">
+                                                <td class="blog-entry-copy">
                                                     Vom farbenfrohen Buchfinken über die quirlige Blaumeise bis hin zum
                                                     scheuen Buntspecht: Deutsche Gärten bieten Lebensraum für weit über
                                                     30 gängige Vogelarten. Ein neuer Online-Leitfaden zeigt, mit welchem
@@ -125,6 +130,7 @@ Beschreibung:  Wiederverwendbares HTML-Seiten-Template mit einheitlichem Header,
                                                     Haustür gezielt unterstützen kann...
                                                 </td>
                                             </tr>
+                                            </tbody>
                                         </table>
                                     </fieldset>
                                     <fieldset>
@@ -132,15 +138,16 @@ Beschreibung:  Wiederverwendbares HTML-Seiten-Template mit einheitlichem Header,
                                             <h2>Großes Update für „VogelFinder“: Neue KI-Erkennung in entwicklung</h2>
                                         </legend>
                                         <!--Table benutzen, damit text und bild richtig aligned sind, ohne table geht das nicht, grrrrr-->
-                                        <table border="0" cellpadding="0" cellspacing="0">
+                                        <table class="blog-entry-layout">
+                                            <tbody>
                                             <tr>
                                                 <!-- Linke Spalte: Das Bild -->
-                                                <td valign="top">
+                                                <td>
                                                     <img src="Assets/b2e9ceb91a2be5f0ead3ec0a9dfcdf40be30705218b598551ad93e1c52f779d6.png"
                                                         alt="Image detection is easy" height="128">
                                                 </td>
                                                 <!-- Rechte Spalte: Der Text beginnt ganz oben auf Bildhöhe -->
-                                                <td valign="center" style="padding-left: 15px;">
+                                                <td class="blog-entry-copy">
                                                     Das Portal „VogelFinder“ blickt in die Zukunft: Das Entwicklerteam
                                                     hat offiziell mit der Arbeit an einer völlig neuen, intelligenten
                                                     Bild- und Audio-Erkennung begonnen. Ziel ist es, dass Nutzer
@@ -152,6 +159,7 @@ Beschreibung:  Wiederverwendbares HTML-Seiten-Template mit einheitlichem Header,
                                                     besonders geduldigen Spatzen starten...
                                                 </td>
                                             </tr>
+                                            </tbody>
                                         </table>
                                     </fieldset>
                                 </section>

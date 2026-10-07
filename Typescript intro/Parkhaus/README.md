@@ -38,7 +38,7 @@ Für die Browserversion wird TypeScript aus dem Repository-Hauptverzeichnis komp
 npm run build:parkhaus
 ```
 
-Anschließend `index.html` im Browser öffnen. Auf GitHub Pages wird die statische Seite unter `Typescript intro/Parkhaus/` bereitgestellt.
+Die Browserversion bietet Deutsch und Englisch. Sie nutzt die gemeinsamen Sprachdateien [`../../de.lang`](../../de.lang) und [`../../en.lang`](../../en.lang), die auch von den anderen CSS-gestalteten Projekten verwendet werden. Anschließend `index.html` im Browser öffnen. Auf GitHub Pages wird die statische Seite unter `Typescript intro/Parkhaus/` bereitgestellt.
 
 Beim ersten Aufruf kann `npx` fragen, ob `ts-node` temporär heruntergeladen werden soll. Alternativ lässt sich die TypeScript-Konfiguration prüfen:
 

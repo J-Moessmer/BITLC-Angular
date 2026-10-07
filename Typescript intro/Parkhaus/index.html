@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Interaktive Parkhaus-Simulation mit Live-Belegung und Tagesabrechnung.">
+    <meta name="description" content="Interaktive Parkhaus-Simulation mit Live-Belegung und Tagesabrechnung." data-i18n-content="metaDescription">
     <title>Parkhaus-Simulation</title>
     <style>
         :root {
@@ -62,7 +62,10 @@
             font-size: 1.2rem;
         }
 
+        .topbar-actions { display: flex; align-items: center; gap: 1.25rem; }
         .topbar a { color: #d9e7dc; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+        .language-picker { display: flex; align-items: center; gap: .5rem; color: #d9e7dc; font-size: .82rem; }
+        .language-select { width: auto; min-height: 36px; padding: .35rem 2rem .35rem .55rem; border-color: rgba(255,255,255,.25); color: #fffefa; background-color: #193b32; }
         main { width: min(1240px, calc(100% - 2.5rem)); margin: 0 auto; padding: 2.25rem 0 4rem; }
 
         .heading {
@@ -210,6 +213,9 @@
         @media (max-width: 760px) {
             main { width: min(100% - 1.25rem, 600px); padding-top: 1.5rem; }
             .topbar { min-height: 60px; padding-inline: .75rem; }
+            .topbar-actions { gap: .7rem; }
+            .language-label { display: none; }
+            .language-select { max-width: 126px; }
             .heading { align-items: start; }
             .clock-panel { min-width: auto; padding: .55rem .65rem; }
             .clock-panel span { display: none; }
@@ -239,17 +245,25 @@
 <body>
     <header class="topbar">
         <div class="brand"><span class="brand-mark" aria-hidden="true">P</span><span>Joshua parking GmbH</span></div>
-        <a href="../../index.html">Projektübersicht</a>
+        <div class="topbar-actions">
+            <label class="language-picker"><span class="language-label" data-i18n="languageLabel">Sprache</span>
+                <select id="languageSelect" class="language-select" aria-label="Sprache" data-i18n-aria="languageLabel">
+                    <option value="de">🇩🇪 Deutsch</option>
+                    <option value="en">🇬🇧 English</option>
+                </select>
+            </label>
+            <a href="../../index.html" data-i18n="projectOverview">Projektübersicht</a>
+        </div>
     </header>
 
     <main>
         <section class="heading" aria-labelledby="pageTitle">
             <div>
-                <p class="eyebrow">Betriebssimulation</p>
+                <p class="eyebrow" data-i18n="eyebrow">Betriebssimulation</p>
                 <h1 id="pageTitle">Parkgarage BITLC Neuss</h1>
-                <p class="subheading">Ein Betriebstag von 08:00 bis 22:00 Uhr</p>
+                <p class="subheading" data-i18n="dayRange">Ein Betriebstag von 08:00 bis 22:00 Uhr</p>
             </div>
-            <div class="clock-panel"><span>SIMULATIONSZEIT</span><strong id="clock" aria-live="off">08:00</strong></div>
+            <div class="clock-panel"><span data-i18n="clockLabel">SIMULATIONSZEIT</span><strong id="clock" aria-live="off">08:00</strong></div>
         </section>
 
         <section id="statusStrip" class="status-strip" data-open="false" aria-live="polite">
@@ -260,46 +274,46 @@
         <div class="dashboard">
             <section class="lot" aria-labelledby="lotTitle">
                 <div class="section-heading">
-                    <h2 id="lotTitle">Parkdeck</h2>
+                    <h2 id="lotTitle" data-i18n="parkingDeck">Parkdeck</h2>
                     <span id="occupancy" class="occupancy">0 von 25 Plätzen · 0 %</span>
                 </div>
-                <progress id="progressTrack" class="progress-track" max="25" value="0" aria-label="Belegung"></progress>
-                <div id="spaces" class="spaces" role="group" aria-label="Parkplätze"></div>
-                <div class="lot-legend" role="group" aria-label="Legende">
-                    <span class="legend-item"><span class="legend-swatch used"></span>Belegt</span>
-                    <span class="legend-item"><span class="legend-swatch"></span>Frei</span>
+                <progress id="progressTrack" class="progress-track" max="25" value="0" aria-label="Belegung" data-i18n-aria="progressLabel"></progress>
+                <div id="spaces" class="spaces" role="group" aria-label="Parkplätze" data-i18n-aria="parkingSpaces"></div>
+                <div class="lot-legend" role="group" aria-label="Legende" data-i18n-aria="legend">
+                    <span class="legend-item"><span class="legend-swatch used"></span><span data-i18n="occupied">Belegt</span></span>
+                    <span class="legend-item"><span class="legend-swatch"></span><span data-i18n="free">Frei</span></span>
                 </div>
             </section>
 
             <div class="side-column">
                 <section class="controls" aria-labelledby="controlsTitle">
-                    <h2 id="controlsTitle">Betrieb steuern</h2>
+                    <h2 id="controlsTitle" data-i18n="controls">Betrieb steuern</h2>
                     <div class="settings">
-                        <label>Stellplätze
+                        <label><span data-i18n="capacity">Stellplätze</span>
                             <input id="capacity" type="number" min="1" max="100" value="25" inputmode="numeric">
                         </label>
-                        <label>Tempo
+                        <label><span data-i18n="speed">Tempo</span>
                             <select id="speed">
-                                <option value="1">1× · Echtzeit</option>
-                                <option value="60" selected>60× · 1 Std./Min.</option>
-                                <option value="600">600× · 10 Std./Min.</option>
+                                <option value="1" data-i18n="speed.realtime">1× · Echtzeit</option>
+                                <option value="60" selected data-i18n="speed.hour">60× · 1 Std./Min.</option>
+                                <option value="600" data-i18n="speed.tenHours">600× · 10 Std./Min.</option>
                             </select>
                         </label>
                     </div>
                     <div class="button-row">
-                        <button id="openButton" class="action" type="button">Öffnen</button>
-                        <button id="finishButton" class="action danger" type="button" disabled>Abrechnen</button>
+                        <button id="openButton" class="action" type="button" disabled data-i18n="open">Öffnen</button>
+                        <button id="finishButton" class="action danger" type="button" disabled data-i18n="settle">Abrechnen</button>
                     </div>
                     <div class="button-row">
-                        <button id="parkButton" class="action secondary" type="button" disabled>Auto einfahren</button>
+                        <button id="parkButton" class="action secondary" type="button" disabled data-i18n="parkCar">Auto einfahren</button>
                     </div>
-                    <button id="resetButton" class="action secondary full-button" type="button" hidden>Neuen Betriebstag starten</button>
+                    <button id="resetButton" class="action secondary full-button" type="button" hidden data-i18n="resetDay">Neuen Betriebstag starten</button>
                 </section>
 
-                <section class="controls" aria-label="Einnahmen">
+                <section class="controls" aria-label="Einnahmen" data-i18n-aria="revenue">
                     <div class="totals">
-                        <div class="total"><span>Verbucht</span><strong id="revenue">0,00 €</strong></div>
-                        <div class="total"><span>Bei Ausfahrt</span><strong id="estimatedRevenue">0,00 €</strong></div>
+                        <div class="total"><span data-i18n="booked">Verbucht</span><strong id="revenue">0,00 €</strong></div>
+                        <div class="total"><span data-i18n="estimated">Bei Ausfahrt</span><strong id="estimatedRevenue">0,00 €</strong></div>
                     </div>
                 </section>
             </div>
@@ -307,32 +321,32 @@
 
         <section id="carDetails" class="car-details" aria-labelledby="carDetailsTitle" hidden>
             <div class="car-details-header">
-                <h2 id="carDetailsTitle">Fahrzeugdetails · <span id="selectedPlate"></span></h2>
-                <button id="closeCarDetails" class="close-selection" type="button" aria-label="Fahrzeugauswahl schließen" title="Auswahl schließen">×</button>
+                <h2 id="carDetailsTitle"><span data-i18n="carDetails">Fahrzeugdetails</span> · <span id="selectedPlate"></span></h2>
+                <button id="closeCarDetails" class="close-selection" type="button" aria-label="Fahrzeugauswahl schließen" data-i18n-aria="closeSelection" title="Auswahl schließen" data-i18n-title="closeSelectionTitle">×</button>
             </div>
             <dl class="car-stats">
-                <div class="car-stat"><dt>Eingefahren</dt><dd id="carEntryTime"></dd></div>
-                <div class="car-stat"><dt>Standzeit</dt><dd id="carDuration"></dd></div>
-                <div class="car-stat"><dt>Geplante Ausfahrt</dt><dd id="carPlannedExit"></dd></div>
-                <div class="car-stat"><dt>Preis bei Ausfahrt jetzt</dt><dd id="carCurrentPrice"></dd></div>
+                <div class="car-stat"><dt data-i18n="entryTime">Eingefahren</dt><dd id="carEntryTime"></dd></div>
+                <div class="car-stat"><dt data-i18n="duration">Standzeit</dt><dd id="carDuration"></dd></div>
+                <div class="car-stat"><dt data-i18n="plannedExit">Geplante Ausfahrt</dt><dd id="carPlannedExit"></dd></div>
+                <div class="car-stat"><dt data-i18n="priceAtExit">Preis bei Ausfahrt jetzt</dt><dd id="carCurrentPrice"></dd></div>
             </dl>
             <div class="car-details-actions">
-                <button id="selectedExitButton" class="action" type="button">Auto ausparken</button>
+                <button id="selectedExitButton" class="action" type="button" data-i18n="unpark">Auto ausparken</button>
             </div>
         </section>
 
         <section class="activity" aria-labelledby="activityTitle">
-            <div class="section-heading"><h2 id="activityTitle">Betriebsprotokoll</h2><span id="eventCount" class="occupancy">0 Ereignisse</span></div>
-            <ul id="activityList" class="activity-list"><li><span>Simulation bereit.</span><time>08:00</time></li></ul>
+            <div class="section-heading"><h2 id="activityTitle" data-i18n="activityTitle">Betriebsprotokoll</h2><span id="eventCount" class="occupancy">0 Ereignisse</span></div>
+            <ul id="activityList" class="activity-list"><li><span data-i18n="event.ready">Simulation bereit.</span><time>08:00</time></li></ul>
         </section>
 
         <section id="billing" class="billing" hidden aria-labelledby="billingTitle">
-            <h2 id="billingTitle">Tagesabrechnung</h2>
+            <h2 id="billingTitle" data-i18n="billingTitle">Tagesabrechnung</h2>
             <p id="billingSummary"></p>
             <ul id="billingList" class="billing-list"></ul>
         </section>
     </main>
 
-    <script src="./Parkhaus%20ONLINE.js?v=3"></script>
+    <script src="./Parkhaus%20ONLINE.js?v=6"></script>
 </body>
 </html>

@@ -14,6 +14,10 @@ Dieses Repository sammelt meine Schulübungen zur Webentwicklung und JavaScript-
 
 Die zentrale Projektübersicht befindet sich in der [Haupt-Landingpage](./index.html). Von dort aus können die fertigen Übungen geöffnet werden.
 
+## Sprachauswahl
+
+Die Projektübersicht und alle CSS-gestalteten Browserprojekte bieten Deutsch und Englisch. Die Auswahl wird zwischen den Seiten gespeichert; Übersetzungen und gemeinsame Sprachsteuerung liegen in [`de.lang`](./de.lang), [`en.lang`](./en.lang), [`language.js`](./language.js) und [`language.css`](./language.css). Der reine HTML-VogelAtlas bleibt unverändert auf Deutsch.
+
 ## Projekte
 
 ### 1. VogelFinder – HTML5
@@ -62,6 +66,8 @@ BITLC-Angular/
 ├── .agents/                       # KI-Richtlinien und Projekthistorie
 ├── .vscode/
 ├── index.html                     # Zentrale Landingpage
+├── de.lang / en.lang              # Gemeinsame Übersetzungen
+├── language.js / language.css     # Gemeinsame Sprachauswahl
 ├── Javascript intro/              # JavaScript-Lernübungen
 │   ├── README.md
 │   ├── index001.js

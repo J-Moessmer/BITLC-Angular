@@ -1,0 +1,26 @@
+.project-language-control {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .55rem;
+    width: 100%;
+    margin: 0 0 .85rem;
+    font: 600 .82rem/1.2 "Segoe UI", Arial, sans-serif;
+}
+
+.project-language-control select {
+    width: auto;
+    min-width: 126px;
+    min-height: 38px;
+    padding: .4rem .65rem;
+    border: 1px solid currentColor;
+    border-radius: .35rem;
+    color: inherit;
+    background: transparent;
+    font: inherit;
+}
+
+.project-language-control option {
+    color: #17342d;
+    background: #fff;
+}
