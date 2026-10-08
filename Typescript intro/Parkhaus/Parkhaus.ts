@@ -6,9 +6,9 @@
 //                 simulierte Stunde pro realer Minute.
 // Disclaimer: Lern- und Übungsprojekt ohne Gewährleistung; nicht für den
 //             produktiven Einsatz bestimmt.
-// Erstellt für: J-Moessmer
+// Author: J-Moessmer
 // Erstellt mit: Mensch-KI-Pair-Programming
-// Stand: 02.10.2026 | Prototyp
+// Stand: 08.10.2026 | Prototyp
 // Kommentar-Markierungen: "M ... M" kennzeichnet menschlich geschriebenen Code;
 //                         "K ... K" kennzeichnet KI-generierten Code.
 

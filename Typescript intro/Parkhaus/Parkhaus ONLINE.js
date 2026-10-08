@@ -1,3 +1,15 @@
+// Projekt: Parkhaus-Simulation für online deployment auf GitHub Pages
+// Modul: Parkhaus ONLINE.ts
+// Zweck: Terminalbasierte Parkhaus-Simulation mit einer simulierten Uhr.
+// Start: Im Ordner "Typescript intro/Parkhaus" mit "npx ts-node Parkhaus.ts".
+// Zeitskalierung: 1 = eine simulierte Minute pro realer Minute; 60 = eine
+//                 simulierte Stunde pro realer Minute.
+// Disclaimer: Lern- und Übungsprojekt ohne Gewährleistung; nicht für den
+//             produktiven Einsatz bestimmt.
+// Author: J-Moessmer
+// Umwandlung der ursprünglichen Parkhaus-Simulation in eine browserbasierte Version für GitHub Pages mit copilot
+// Stand: 08.10.2026
+
 "use strict";
 const element = (id) => {
     const found = document.getElementById(id);
