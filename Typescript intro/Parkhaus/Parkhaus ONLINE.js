@@ -1,3 +1,4 @@
+"use strict";
 // Projekt: Parkhaus-Simulation für online deployment auf GitHub Pages
 // Modul: Parkhaus ONLINE.ts
 // Zweck: Terminalbasierte Parkhaus-Simulation mit einer simulierten Uhr.
@@ -9,8 +10,7 @@
 // Author: J-Moessmer
 // Umwandlung der ursprünglichen Parkhaus-Simulation in eine browserbasierte Version für GitHub Pages mit copilot
 // Stand: 08.10.2026
-
-"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const element = (id) => {
     const found = document.getElementById(id);
     if (!found)
@@ -457,3 +457,4 @@ languageSelect.addEventListener('change', () => {
 });
 capacityInput.addEventListener('input', () => capacityInput.setCustomValidity(''));
 void initializeLanguage();
+//# sourceMappingURL=Parkhaus%20ONLINE.js.map
