@@ -22,7 +22,6 @@
 
 import * as readline from 'node:readline/promises';
 
-
 async function main() {
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
     const antwort = await rl.question('Zeit-Multiplikator eingeben (1 = 1 Tick/min, 60 = 60 Ticks/min): ');
