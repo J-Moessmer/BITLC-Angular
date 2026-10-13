@@ -1,0 +1,7 @@
+'use strict';
+/**
+ * @license Angular
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
+var S=["skip","only","concurrent","sequential","shuffle","todo"],I=["skipIf","runIf","each","for"];function l(a){a.__load_patch("vitest",(t,i)=>{let c=t.vitest;if(typeof c=="undefined"||c.__zone_patch__)return;if(c.__zone_patch__=!0,!i.ProxyZoneSpec)throw new Error("Missing ProxyZoneSpec");if(!i.SyncTestZoneSpec)throw new Error("Missing SyncTestZoneSpec");let s=i.current,y=s.fork(new i.SyncTestZoneSpec("vitest.describe")),h=s.fork(new i.ProxyZoneSpec);function E(n){return typeof n!="function"?n:function(...r){return y.run(n,this,r)}}function p(n){if(typeof n!="function")return n;let r=function(){return h.run(n,null,arguments)};return Object.defineProperty(r,"length",{configurable:!0,writable:!0,enumerable:!1}),r.length=n.length,r}function _(n,r){let e=t[n];if(!t[i.__symbol__(n)]){t[i.__symbol__(n)]=e,t[n]=function(...o){return o[1]=r(o[1]),e.apply(this,o)};for(let o of S)t[n][o]=function(...f){return f[1]=r(f[1]),e[o].apply(this,f)};for(let o of I)t[n][o]=function(...f){let b=e[o].apply(e,f);return function(...u){return u[1]=r(u[1]),b.apply(this,u)}}}}["suite","describe"].forEach(n=>_(n,E)),["it","test"].forEach(n=>_(n,p)),["beforeEach","afterEach","beforeAll","afterAll"].forEach(n=>{let r=t[n];t[i.__symbol__(n)]||(t[i.__symbol__(n)]=r,t[n]=function(...e){return e[0]=p(e[0]),r.apply(this,e)})})})}l(Zone);
