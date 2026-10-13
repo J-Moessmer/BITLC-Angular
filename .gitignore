@@ -73,3 +73,6 @@ workspaceStorage/
 # Test- und Coverage-Ausgaben
 .nyc_output/
 coverage/
+
+#other
+desktop.ini
