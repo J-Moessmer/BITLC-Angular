@@ -1,12 +1,10 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { BooksOverviewPage } from './books-portal/books-overview-page/books-overview-page';
 
 @Component({
-  imports: [RouterOutlet],
-  selector: 'app-root',
-  styleUrl: './app.css',
-  templateUrl: './app.html',
-})
-export class App {
-  protected readonly title = signal('BookManager');
-}
+    selector: 'app-root',
+    imports: [BooksOverviewPage],
+    templateUrl: './app.html',
+    styleUrl: './app.css'
+    })
+export class App{}
