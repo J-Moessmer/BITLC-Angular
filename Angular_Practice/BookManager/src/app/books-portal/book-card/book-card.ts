@@ -1,5 +1,4 @@
-import { Component, input } from '@angular/core';
-
+import { Component, input, output } from '@angular/core';
 import { Book } from '../../shared/book';
 
 @Component({
@@ -10,4 +9,9 @@ import { Book } from '../../shared/book';
 })
 export class BookCard {
   readonly book = input.required<Book>();
-}
+  readonly like = output<Book>();
+
+  likeBook() {
+    this.like.emit(this.book());  
+    }
+  }

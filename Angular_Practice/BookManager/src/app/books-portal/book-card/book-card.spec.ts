@@ -1,5 +1,6 @@
-import { inputBinding, signal } from '@angular/core';
+import { inputBinding, outputBinding, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Mock } from 'vitest';
 
 import { Book } from '../../shared/book';
 import { BookCard } from './book-card';
@@ -15,15 +16,21 @@ describe('BookCard', () => {
     imageUrl: 'https://example.com/test.png',
     createdAt: '2026-01-01'
   });
+  let likeFn: Mock;
 
   beforeEach(async () => {
+    likeFn = vi.fn();
+
     await TestBed.configureTestingModule({
       imports: [BookCard]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(BookCard, {
-      bindings: [inputBinding('book', testBook)]
+      bindings: [
+        inputBinding('book', testBook),
+        outputBinding('like', likeFn)
+      ]
     });
     component = fixture.componentInstance;
     await fixture.whenStable();
@@ -44,5 +51,10 @@ describe('BookCard', () => {
     const imageEl = hostEl.querySelector('img');
     expect(imageEl).toBeTruthy();
     expect(imageEl?.src).toBe(testBook().imageUrl);
+  });
+
+  it('should emit the like event with a book', () => {
+    component.likeBook();
+    expect(likeFn).toHaveBeenCalledExactlyOnceWith(testBook());
   });
 });

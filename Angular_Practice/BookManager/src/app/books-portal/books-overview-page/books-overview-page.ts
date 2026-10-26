@@ -11,6 +11,7 @@ import { BookCard } from '../book-card/book-card';
 })
 export class BooksOverviewPage {
   protected books = signal<Book[]>([]);
+  protected likedBooks = signal<Book[]>([]);
 
   constructor() {
     this.books.set([
@@ -33,5 +34,22 @@ export class BooksOverviewPage {
         createdAt: new Date().toISOString(),
       },
     ]);
+  }
+
+  addLikedBook(newLikedBook: Book) {
+    const foundBook = this.likedBooks().find(
+      (b) => b.isbn === newLikedBook.isbn
+    );
+
+    if (!foundBook) {
+      this.likedBooks.update((likedBooks) => [
+        ...likedBooks,
+        newLikedBook
+      ]);
+    }
+  }
+
+  clearLikedBooks() {
+    this.likedBooks.set([]);
   }
 }

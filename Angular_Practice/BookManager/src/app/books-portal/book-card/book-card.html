@@ -2,9 +2,10 @@
 @let titleId = `title-${b.isbn}`;
 
 <article class="book-card">
-  <img alt="Buchcover"
+  <img
     [src]="b.imageUrl"
-    [aria-describedby]="titleId" />
+     alt="Buchcover"
+    [aria-describedby]="titleId" >
   <header>
     <h2 [id]="titleId">{{ b.title }}</h2>
   </header>
@@ -14,4 +15,8 @@
     }
     ISBN: {{ b.isbn }}
   </div>
+  <footer>
+    <button type="button" class="secondary"  
+    (click)="likeBook()">Like</button>
+  </footer>
 </article>
