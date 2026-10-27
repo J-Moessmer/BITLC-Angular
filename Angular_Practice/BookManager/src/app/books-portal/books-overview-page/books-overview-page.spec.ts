@@ -51,4 +51,34 @@ describe('BooksOverviewPage', () => {
     expect(cardEls[0].textContent).toContain('Tierisch gut kochen');
     expect(cardEls[1].textContent).toContain('Backen mit Affen');
   });
+
+  it('should display all books for empty search term', () => {
+    component['searchTerm'].set('');
+
+    const books = component['filteredBooks']();
+    expect(books).toHaveLength(2);
+  });
+
+  it('should filter books based on the search term', () => {
+    component['searchTerm'].set('Affe');
+
+    const books = component['filteredBooks']();
+    expect(books).toHaveLength(1);
+    expect(books[0].title).toBe('Backen mit Affen');
+  });
+
+  it('should filter books ignoring case sensitivity', () => {
+    component['searchTerm'].set('AFFEN');
+
+    const books = component['filteredBooks']();
+    expect(books).toHaveLength(1);
+    expect(books[0].title).toBe('Backen mit Affen');
+  });
+
+  it('should return an empty array if no book matches', () => {
+    component['searchTerm'].set('unbekannter Titel');
+
+    const books = component['filteredBooks']();
+    expect(books).toHaveLength(0);
+  });
 });
