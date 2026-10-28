@@ -1,7 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, computed, inject, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
-import { Book } from '../../shared/book';
 import { BookStore } from '../../shared/book-store';
 
 @Component({
@@ -12,14 +11,7 @@ import { BookStore } from '../../shared/book-store';
 })
 export class BookDetailsPage {
   #bookStore = inject(BookStore);
-  #route = inject(ActivatedRoute);
 
-  protected book = signal<Book | undefined>(undefined);
-
-  constructor() {
-    const isbn = this.#route.snapshot.paramMap.get('isbn');
-    if (isbn) {
-      this.book.set(this.#bookStore.getSingle(isbn));
-    }
-  }
+  readonly isbn = input.required<string>();
+  protected book = computed(() => this.#bookStore.getSingle(this.isbn()));
 }
