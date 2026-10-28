@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
+
 import { Book } from './book';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class BookStore {
 
   #books: Book[] = [
@@ -29,5 +28,9 @@ export class BookStore {
 
   getAll(): Book[] {
     return this.#books;
+  }
+
+  getSingle(isbn: string): Book | undefined {
+    return this.#books.find(book => book.isbn === isbn);
   }
 }

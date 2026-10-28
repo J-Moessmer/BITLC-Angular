@@ -2,10 +2,9 @@
 @let titleId = `title-${b.isbn}`;
 
 <article class="book-card">
-  <img
+  <img alt="Buchcover"
     [src]="b.imageUrl"
-     alt="Buchcover"
-    [aria-describedby]="titleId" >
+    [aria-describedby]="titleId" />
   <header>
     <h2 [id]="titleId">{{ b.title }}</h2>
   </header>
@@ -16,7 +15,7 @@
     ISBN: {{ b.isbn }}
   </div>
   <footer>
-    <button type="button" class="secondary"  
-    (click)="likeBook()">Like</button>
+    <a [routerLink]="['details', b.isbn]">Details</a>
+    <button type="button" class="secondary" (click)="likeBook()">Like</button>
   </footer>
 </article>

@@ -1,0 +1,36 @@
+@if (book(); as b) {
+  @let titleId = `title-${b.isbn}`;
+  <article>
+    <header>
+      <h1 [id]="titleId">{{ b.title }}</h1>
+      @if (b.subtitle) {
+        <p role="doc-subtitle">{{ b.subtitle }}</p>
+      }
+      <div class="grid">
+        <div>
+          <h2>Authors</h2>
+          <ul>
+            @for (author of b.authors; track $index) {
+              <li>{{ author }}</li>
+            }
+          </ul>
+        </div>
+        <div>
+          <h2>ISBN</h2>
+          {{ b.isbn }}
+        </div>
+        <div>
+          <h2>Created at</h2>
+          {{ b.createdAt }}
+        </div>
+      </div>
+    </header>
+    <p>{{ b.description }}</p>
+    <img alt="Buchcover"
+      [src]="b.imageUrl"
+      [aria-describedby]="titleId" />
+    <footer>
+      <a routerLink="/books">Back to list</a>
+    </footer>
+  </article>
+}
