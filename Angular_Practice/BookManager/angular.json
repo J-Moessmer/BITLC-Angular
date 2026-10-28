@@ -16,6 +16,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "preserveSymlinks": true,
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
@@ -54,12 +55,14 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {},
           "configurations": {
             "production": {
               "buildTarget": "BookManager:build:production"
             },
             "development": {
-              "buildTarget": "BookManager:build:development"
+              "buildTarget": "BookManager:build:development",
+              "poll": 2000
             }
           },
           "defaultConfiguration": "development"
