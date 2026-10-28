@@ -3,6 +3,8 @@ import { provideLocationMocks } from '@angular/common/testing';
 import { inputBinding, signal, WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
+import { of } from 'rxjs';
+import { Mock } from 'vitest';
 
 import { BookStore } from '../../shared/book-store';
 import { booksPortalRoutes } from '../books-portal.routes';
@@ -11,18 +13,24 @@ import { BookDetailsPage } from './book-details-page';
 describe('BookDetailsPage', () => {
   let component: BookDetailsPage;
   let fixture: ComponentFixture<BookDetailsPage>;
-  let bookStore: BookStore;
+  let getSingleFn: Mock;
 
   let isbn: WritableSignal<string>;
+  const testBook = { isbn: '12345', title: 'Test Book 1', authors: [] };
 
   beforeEach(async () => {
     isbn = signal('12345');
+    getSingleFn = vi.fn().mockReturnValue(of(testBook));
 
     await TestBed.configureTestingModule({
       imports: [BookDetailsPage],
       providers: [
         provideRouter(booksPortalRoutes),
         provideLocationMocks(),
+        {
+          provide: BookStore,
+          useValue: { getSingle: getSingleFn }
+        }
       ]
     })
     .compileComponents();
@@ -31,7 +39,6 @@ describe('BookDetailsPage', () => {
       bindings: [inputBinding('isbn', isbn)]
     });
     component = fixture.componentInstance;
-    bookStore = TestBed.inject(BookStore);
     await fixture.whenStable();
   });
 
@@ -40,8 +47,8 @@ describe('BookDetailsPage', () => {
   });
 
   it('should load the correct book by ISBN', async () => {
-    const expectedBook = bookStore.getSingle('12345');
-    expect(component['book']()).toEqual(expectedBook);
+    expect(getSingleFn).toHaveBeenCalledExactlyOnceWith('12345');
+    expect(component['book']()).toEqual(testBook);
   });
 
   it('should navigate to the details page', async () => {
@@ -54,10 +61,13 @@ describe('BookDetailsPage', () => {
   });
 
   it('should update the book when ISBN changes', async () => {
+    const anotherBook = { isbn: '67890', title: 'Test Book 2', authors: [] };
+    getSingleFn.mockReturnValue(of(anotherBook));
+
     isbn.set('67890');
     await fixture.whenStable();
 
-    const expectedBook = bookStore.getSingle('67890');
-    expect(component['book']()).toEqual(expectedBook);
+    expect(getSingleFn).toHaveBeenCalledWith('67890');
+    expect(component['book']()).toEqual(anotherBook);
   });
 });

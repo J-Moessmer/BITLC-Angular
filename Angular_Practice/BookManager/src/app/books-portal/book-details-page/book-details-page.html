@@ -31,6 +31,10 @@
       [aria-describedby]="titleId" />
     <footer>
       <a routerLink="/books">Back to list</a>
+      <a routerLink="/books/details/9783988890641">Angular Book</a>
+      <button type="button" (click)="removeBook()">
+        Delete book
+      </button>
     </footer>
   </article>
 }
