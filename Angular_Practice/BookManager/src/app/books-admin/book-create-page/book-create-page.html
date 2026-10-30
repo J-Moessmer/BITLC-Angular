@@ -1,0 +1,36 @@
+<h1>Create book</h1>
+
+<form [formRoot]="bookForm">
+  <label for="title">Title</label>
+  <input type="text" id="title" [formField]="bookForm.title" />
+
+  <label for="subtitle">Subtitle</label>
+  <input type="text" id="subtitle" [formField]="bookForm.subtitle" />
+
+  <label for="isbn">ISBN</label>
+  <input type="text" id="isbn" [formField]="bookForm.isbn" />
+
+  <fieldset>
+    <legend>Authors</legend>
+    <button type="button" (click)="addAuthorField()">
+      Add Author
+    </button>
+    <div role="group">
+      @for (author of bookForm.authors; track author) {
+        <input type="text"
+          aria-label="Author {{ $index + 1 }}"
+          [formField]="author" />
+      }
+    </div>
+  </fieldset>
+
+  <label for="description">Description</label>
+  <textarea id="description" [formField]="bookForm.description"></textarea>
+
+  <label for="imageUrl">Thumbnail URL</label>
+  <input type="url" id="imageUrl" [formField]="bookForm.imageUrl" />
+
+  <button type="submit" [aria-busy]="bookForm().submitting()">
+    Save
+  </button>
+</form>
