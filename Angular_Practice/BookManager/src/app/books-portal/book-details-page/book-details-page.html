@@ -1,4 +1,14 @@
-@if (book(); as b) {
+@if (book.error()) {
+  <p role="alert">Book could not be found.</p>
+  <a routerLink="/books">Back to list</a>
+}
+
+@if (book.isLoading()) {
+  <p aria-busy="true">Loading ...</p>
+}
+
+@if (book.hasValue()) {
+  @let b = book.value();
   @let titleId = `title-${b.isbn}`;
   <article>
     <header>

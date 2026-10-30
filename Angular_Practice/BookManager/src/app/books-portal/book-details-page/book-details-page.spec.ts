@@ -1,9 +1,8 @@
 import { Location } from '@angular/common';
 import { provideLocationMocks } from '@angular/common/testing';
-import { inputBinding, signal, WritableSignal } from '@angular/core';
+import { inputBinding, resource, signal, WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
-import { of } from 'rxjs';
 import { Mock } from 'vitest';
 
 import { BookStore } from '../../shared/book-store';
@@ -20,7 +19,7 @@ describe('BookDetailsPage', () => {
 
   beforeEach(async () => {
     isbn = signal('12345');
-    getSingleFn = vi.fn().mockReturnValue(of(testBook));
+    getSingleFn = vi.fn().mockResolvedValue(testBook);
 
     await TestBed.configureTestingModule({
       imports: [BookDetailsPage],
@@ -29,7 +28,12 @@ describe('BookDetailsPage', () => {
         provideLocationMocks(),
         {
           provide: BookStore,
-          useValue: { getSingle: getSingleFn }
+          useFactory: () => ({
+            getSingle: (isbn: () => string) => resource({
+              params: isbn,
+              loader: getSingleFn,
+            })
+          })
         }
       ]
     })
@@ -47,8 +51,10 @@ describe('BookDetailsPage', () => {
   });
 
   it('should load the correct book by ISBN', async () => {
-    expect(getSingleFn).toHaveBeenCalledExactlyOnceWith('12345');
-    expect(component['book']()).toEqual(testBook);
+    expect(getSingleFn).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ params: '12345' })
+    );
+    expect(component['book'].value()).toEqual(testBook);
   });
 
   it('should navigate to the details page', async () => {
@@ -62,12 +68,14 @@ describe('BookDetailsPage', () => {
 
   it('should update the book when ISBN changes', async () => {
     const anotherBook = { isbn: '67890', title: 'Test Book 2', authors: [] };
-    getSingleFn.mockReturnValue(of(anotherBook));
+    getSingleFn.mockResolvedValue(anotherBook);
 
     isbn.set('67890');
     await fixture.whenStable();
 
-    expect(getSingleFn).toHaveBeenCalledWith('67890');
-    expect(component['book']()).toEqual(anotherBook);
+    expect(getSingleFn).toHaveBeenLastCalledWith(
+      expect.objectContaining({ params: '67890' })
+    );
+    expect(component['book'].value()).toEqual(anotherBook);
   });
 });

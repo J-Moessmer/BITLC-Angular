@@ -1,18 +1,36 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
+import { resource } from '@angular/core';
 
 import { BooksOverviewPage } from './books-overview-page';
 import { booksPortalRoutes } from '../books-portal.routes';
+import { Book } from '../../shared/book';
+import { BookStore } from '../../shared/book-store';
 
 describe('BooksOverviewPage', () => {
   let component: BooksOverviewPage;
   let fixture: ComponentFixture<BooksOverviewPage>;
 
+  const mockBooks: Partial<Book>[] = [
+    { isbn: '1234', title: 'Tierisch gut kochen' },
+    { isbn: '5678', title: 'Backen mit Affen' }
+  ];
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [BooksOverviewPage],
-      providers: [provideRouter(booksPortalRoutes)]
+      providers: [
+        provideRouter(booksPortalRoutes),
+        {
+          provide: BookStore,
+          useFactory: () => ({
+            getAll: () => resource({
+              loader: () => Promise.resolve(mockBooks),
+            })
+          })
+        }
+      ]
     })
     .compileComponents();
 
@@ -26,7 +44,7 @@ describe('BooksOverviewPage', () => {
   });
 
   it('should have 2 books with correct titles', () => {
-    const books = component['books']();
+    const books = component['books'].value();
 
     expect(books).toHaveLength(2);
     expect(books[0].title).toBe('Tierisch gut kochen');
