@@ -27,11 +27,11 @@
         </div>
         <div>
           <h2>ISBN</h2>
-          {{ b.isbn }}
+          {{ b.isbn | isbnFormat }}
         </div>
         <div>
           <h2>Created at</h2>
-          {{ b.createdAt }}
+          {{ b.createdAt | date:'medium' }}
         </div>
       </div>
     </header>
