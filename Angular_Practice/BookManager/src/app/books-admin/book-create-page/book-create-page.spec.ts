@@ -74,7 +74,14 @@ describe('BookCreatePage', () => {
     vi.useRealTimers();
   });
 
+  it('should not submit form data when form is invalid', () => {
+    const formEl = fixture.nativeElement.querySelector('form');
+    formEl.dispatchEvent(new Event('submit'));
+    expect(createFn).not.toHaveBeenCalled();
+  });
+
   it('should filter out empty author data', () => {
+    component['bookForm']().value.set(validBook);
     component['bookForm'].authors().value.set(
       ['', 'Test Author', '']
     );
@@ -90,10 +97,60 @@ describe('BookCreatePage', () => {
   it('should navigate to created book', async () => {
     const location = TestBed.inject(Location);
 
+    component['bookForm']().value.set(validBook);
     const formEl = fixture.nativeElement.querySelector('form');
     formEl.dispatchEvent(new Event('submit'));
     await fixture.whenStable();
 
     expect(location.path()).toBe('/books/details/1234567890123');
+  });
+
+  it('should validate ISBN field', () => {
+    const isbnState = component['bookForm'].isbn();
+
+    // Prüfung: required
+    isbnState.markAsTouched();
+    expect(isbnState.errors()).toHaveLength(1);
+    expect(isbnState.errors()[0].kind).toBe('required');
+
+    // Prüfung: minLength
+    isbnState.value.set('123456789012');
+    expect(isbnState.errors()).toHaveLength(1);
+    expect(isbnState.errors()[0].kind).toBe('minLength');
+
+    // Prüfung: maxLength
+    isbnState.value.set('12345678901234');
+    expect(isbnState.errors()).toHaveLength(1);
+    expect(isbnState.errors()[0].kind).toBe('maxLength');
+
+    // Prüfung: gültiger Wert
+    isbnState.value.set('1234567890123');
+    expect(isbnState.errors()).toEqual([]);
+  });
+
+  it('should show error and mark field invalid', async () => {
+    const state = component['bookForm'].description();
+    const field = fixture.nativeElement.querySelector('textarea');
+    let error = fixture.nativeElement.querySelector('#description-error');
+
+    expect(field.hasAttribute('aria-errormessage')).toBe(false);
+    expect(field.hasAttribute('aria-invalid')).toBe(false);
+    expect(error).toBeNull();
+
+    state.markAsTouched();
+    await fixture.whenStable();
+
+    error = fixture.nativeElement.querySelector('#description-error');
+    expect(field.getAttribute('aria-errormessage')).toBe('description-error');
+    expect(field.getAttribute('aria-invalid')).toBe('true');
+    expect(error.textContent).toBe('Description is required.');
+
+    state.value.set('my description');
+    await fixture.whenStable();
+
+    error = fixture.nativeElement.querySelector('#description-error');
+    expect(field.hasAttribute('aria-errormessage')).toBe(false);
+    expect(field.getAttribute('aria-invalid')).toBe('false');
+    expect(error).toBeNull();
   });
 });

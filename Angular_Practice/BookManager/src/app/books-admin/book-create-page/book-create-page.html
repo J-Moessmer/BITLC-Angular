@@ -1,34 +1,89 @@
 <h1>Create book</h1>
 
 <form [formRoot]="bookForm">
+  @let titleInvalid = isInvalid(bookForm.title);
   <label for="title">Title</label>
-  <input type="text" id="title" [formField]="bookForm.title" />
+  <input type="text" id="title"
+    [formField]="bookForm.title"
+    [aria-errormessage]="titleInvalid ? 'title-error' : null"
+    [aria-invalid]="titleInvalid" />
+  @if (titleInvalid) {
+    <small role="alert" id="title-error">
+      @for (e of bookForm.title().errors(); track e.kind) {
+        <span>{{ e.message }}</span>
+      }
+    </small>
+  }
 
   <label for="subtitle">Subtitle</label>
   <input type="text" id="subtitle" [formField]="bookForm.subtitle" />
 
+  @let isbnInvalid = isInvalid(bookForm.isbn);
   <label for="isbn">ISBN</label>
-  <input type="text" id="isbn" [formField]="bookForm.isbn" />
+  <input type="text" id="isbn"
+    [formField]="bookForm.isbn"
+    [aria-errormessage]="isbnInvalid ? 'isbn-error' : null"
+    [aria-invalid]="isbnInvalid" />
+  @if (isbnInvalid) {
+    <small role="alert" id="isbn-error">
+      @for (e of bookForm.isbn().errors(); track e.kind) {
+        <span>{{ e.message }}</span>
+      }
+    </small>
+  }
 
   <fieldset>
     <legend>Authors</legend>
     <button type="button" (click)="addAuthorField()">
       Add Author
     </button>
+    @let authorsInvalid = isInvalid(bookForm.authors);
     <div role="group">
       @for (author of bookForm.authors; track author) {
         <input type="text"
           aria-label="Author {{ $index + 1 }}"
-          [formField]="author" />
+          [formField]="author"
+          [aria-errormessage]="authorsInvalid ? 'authors-error' : null"
+          [aria-invalid]="authorsInvalid" />
+      }
+      @if (authorsInvalid) {
+        <small role="alert" id="authors-error">
+          @for (e of bookForm.authors().errors(); track e.kind) {
+            <span>{{ e.message }}</span>
+          }
+        </small>
       }
     </div>
+
   </fieldset>
 
+  @let descriptionInvalid = isInvalid(bookForm.description);
   <label for="description">Description</label>
-  <textarea id="description" [formField]="bookForm.description"></textarea>
+  <textarea id="description"
+    [formField]="bookForm.description"
+    [aria-errormessage]="descriptionInvalid ? 'description-error' : null"
+    [aria-invalid]="descriptionInvalid"></textarea>
+  @if (descriptionInvalid) {
+    <small role="alert" id="description-error">
+      @for (e of bookForm.description().errors(); track e.kind) {
+        <span>{{ e.message }}</span>
+      }
+    </small>
+  }
 
+  @let imageUrlInvalid = isInvalid(bookForm.imageUrl);
   <label for="imageUrl">Thumbnail URL</label>
-  <input type="url" id="imageUrl" [formField]="bookForm.imageUrl" />
+  <input type="url" id="imageUrl"
+    [formField]="bookForm.imageUrl"
+    [aria-errormessage]="imageUrlInvalid ? 'image-url-error' : null"
+    [aria-invalid]="imageUrlInvalid" />
+  @if (imageUrlInvalid) {
+    <small role="alert" id="image-url-error">
+      @for (e of bookForm.imageUrl().errors(); track e.kind) {
+        <span>{{ e.message }}</span>
+      }
+    </small>
+  }
 
   <button type="submit" [aria-busy]="bookForm().submitting()">
     Save
