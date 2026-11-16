@@ -1,4 +1,15 @@
-# Kleiner Taschenrechner
+# Kleiner Taschenrechner (JavaScript)
+
+## Inhaltsverzeichnis
+
+- [Überblick](#überblick)
+- [Hinweis / Disclaimer](#hinweis--disclaimer)
+- [Funktionsumfang](#funktionsumfang)
+- [Lokale Ausführung](#lokale-ausführung)
+- [Beispiel](#beispiel)
+- [Online-Version](#online-version)
+- [Wichtige Dateien](#wichtige-dateien)
+- [Aufbau](#aufbau)
 
 ## Überblick
 
@@ -9,7 +20,7 @@ Dieses Projekt ist ein kleiner JavaScript-Taschenrechner für grundlegende Reche
 5-2+4
 ```
 
-Die App prüft, ob die Eingabe gültig ist, und berechnet das Ergebnis direkt auf der Webseite. Die ursprüngliche Konsolenversion kann weiterhin lokal gestartet werden.
+Die App prüft, ob die Eingabe gültig ist, und berechnet das Ergebnis direkt auf der Webseite oder in der Konsole.
 
 ## Hinweis / Disclaimer
 
@@ -17,13 +28,13 @@ Die App prüft, ob die Eingabe gültig ist, und berechnet das Ergebnis direkt au
 
 ## Funktionsumfang
 
-- Eingabe einer kompletten Berechnung im Browser
+- Eingabe einer kompletten Berechnung in der Konsole oder im Browser
 - Entfernen von Leerzeichen
 - Validierung der Reihenfolge von Zahlen und Operatoren
-- Unterstützung für `+`, `-`, `*`, `/`
-- Korrekte Priorität: `*` und `/` vor `+` und `-`
+- Unterstützung für `+`, `-`, `*`, `/` (inkl. Dezimalzahlen und Vorzeichen)
+- Korrekte Priorität: `*` und `/` vor `+` und `-` (Punkt vor Strich)
 - Fehlerbehandlung bei ungültiger Eingabe oder Division durch null
-- Bedienung über eine statische HTML-Seite ohne Server-Code
+- Bedienung im Browser über eine statische HTML-Seite mit Sprachumschaltung (Deutsch/Englisch)
 
 ## Lokale Ausführung
 
@@ -72,13 +83,33 @@ Fehler: Division durch 0 ist nicht erlaubt.
 
 ## Online-Version
 
-Die Browser-Version liegt in `index.html` und `Taschenrechner ONLINE.js`. Beide Dateien werden von GitHub Pages direkt als statische Dateien ausgeliefert.
+Die Browser-Version liegt in [`index.html`](./index.html) und [`Taschenrechner ONLINE.js`](./Taschenrechner%20ONLINE.js) und bindet die gemeinsame Sprachauswahl ([`../../language.js`](../../language.js), [`../../de.lang`](../../de.lang), [`../../en.lang`](../../en.lang)) ein. Beide Dateien werden von GitHub Pages direkt als statische Dateien ausgeliefert:
+
+<https://j-moessmer.github.io/BITLC-Angular/Javascript%20intro/Taschenrechner/>
 
 ## Wichtige Dateien
 
-- `Taschenrechner.js` – Kernlogik zur Tokenisierung und Berechnung
-- `Taschenrechner ONLINE.js` – Browser-Version für GitHub Pages
+- `Taschenrechner.js` – Kernlogik zur Tokenisierung und Berechnung (Konsole)
+- `Taschenrechner ONLINE.js` – Browser-Logik für GitHub Pages
 - `index.html` – Webseite der Browser-Version
 - `index.js` – Einstiegspunkt für die Konsole
 - [Planungsdokument](./Plannung/Programmplannung.md) – Aufgabenbeschreibung und Planung
 - [Programmzeichnung](./Plannung/programplanzeichnung.png)
+
+## Aufbau
+
+```mermaid
+flowchart LR
+   Input[Rechenausdruck] --> Tokenize[tokenize]
+   Tokenize --> Calculate[calculate]
+   Calculate --> Output[Ergebnis oder Fehlermeldung]
+   Browser[index.html] --> Online[Taschenrechner ONLINE.js]
+   Online --> Output
+```
+
+Beispiel für die Eingabe und Ausgabe:
+
+```text
+Berechnung > 12+4*2
+Ergebnis: 20
+```

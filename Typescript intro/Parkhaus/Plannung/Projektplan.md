@@ -58,7 +58,7 @@ Die Zeitskalierung bestimmt, wie schnell die Simulation gegenüber der echten Ze
 **Parkhausstatus bei 9 belegten von 20 Plätzen (45 %):**
 
 ```ts
-//bsp UI interface "laufender betrieb" 
+//bsp UI interface "laufender betrieb"
 ╔══════════════════════════════════════════════════════════════╗ <64 zeichen breite>
 ║                       Parkhaus UI                            ║ <62 zeichen effektiver schriftraum>
 ╠══════════════════════════════════════════════════════════════╣
@@ -174,18 +174,18 @@ Gespeichert werden die daten in 2 Objekten. Die aktuelle Belegung wird aus der L
 
 ```ts
 type Auto = {
-	kennzeichen: string; // vier Ziffern
-	einfahrtTick: number;
-	geplanteParkdauerMinuten: number | null;
-	ausfahrtTick?: number;
+  kennzeichen: string; // vier Ziffern
+  einfahrtTick: number;
+  geplanteParkdauerMinuten: number | null;
+  ausfahrtTick?: number;
 };
 
 type Parkhaus = {
-	kapazitaet: number;
-	geparkteAutos: Auto[];
-	ausgefahreneAutos: Auto[];
-	einnahmenCent: number;
-	aktuellerTick: number;
-	istGeoeffnet: boolean;
+  kapazitaet: number;
+  geparkteAutos: Auto[];
+  ausgefahreneAutos: Auto[];
+  einnahmenCent: number;
+  aktuellerTick: number;
+  istGeoeffnet: boolean;
 };
 ```

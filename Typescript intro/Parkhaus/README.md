@@ -10,12 +10,13 @@
 - [Projektstruktur](#projektstruktur)
 - [Planung](#planung)
 - [Hinweis](#hinweis)
+- [Beispiel](#beispiel)
 
 ## Überblick
 
 Die Parkhaus-Simulation ist ein TypeScript-Lernprojekt mit einer Terminalversion und einer interaktiven Browserversion. Beide Varianten stellen eine Parkhausuhr, zufällige und manuelle Einfahrten, Ausfahrten, Gebühren und eine Endabrechnung dar.
 
-Die Browserversion kann direkt auf GitHub Pages geöffnet werden: [Parkhaus online](./index.html).
+Die Browserversion kann direkt auf GitHub Pages geöffnet werden: [Parkhaus online](./index.html) (<https://j-moessmer.github.io/BITLC-Angular/Typescript%20intro/Parkhaus/>).
 
 ## Voraussetzungen und Start
 
@@ -67,7 +68,7 @@ Automatische Zufallseinfahrten erfolgen zusätzlich während des geöffneten Bet
 - Der Simulationstag beginnt um `08:00`; nach 840 Ticks endet er um `22:00`.
 - Ein Tick entspricht einer simulierten Minute. Der Multiplikator verändert nur die Geschwindigkeit der Simulation.
 - Bei jedem Tick besteht eine 50-%-Chance auf eine automatische Einfahrt, solange das Parkhaus geöffnet und noch nicht voll ist.
-- Kennzeichen bestehen aus vier Ziffern und werden bei gleichzeitig geparkten Autos nicht doppelt vergeben.
+- Kennzeichen bestehen aus vier Ziffern und werden bei gleichzeitig geparkten Autos nicht doppelt vergeben. Nach der Ausfahrt kann dasselbe Kennzeichen erneut vergeben werden.
 - Für jedes Auto wird eine geplante Parkdauer von 1 bis 1440 Minuten erzeugt. Bei Ablauf wird das Auto automatisch ausgeparkt und abgerechnet.
 - Alle 120 Ticks wird die Belegung geprüft. Liegt sie über 80 %, können bis zu `floor(Kapazität × 10 %)` der ältesten Autos ausfahren, sofern sie mindestens 240 Ticks (vier Stunden) geparkt haben.
 - Bei `Schließen`, `Ende` oder um `22:00` werden alle verbleibenden Autos ausgefahren. Die Abrechnung listet alle erfassten Kennzeichen.
@@ -103,16 +104,27 @@ Der Befehl `Einnahmen` berechnet den aktuellen Preis jedes noch geparkten Autos 
 ## Projektstruktur
 
 - `Parkhaus.ts` – Terminal-App, Parkhausmodell, Tick-Logik, Ein-/Ausfahrten, Preisberechnung und ANSI-UI
-- `index.html` und `Parkhaus ONLINE.ts` – Browseroberfläche und browserbasierte Simulation
+- `index.html`, `Parkhaus ONLINE.ts` und `Parkhaus ONLINE.js` – Browseroberfläche und browserbasierte Simulation
 - `tsconfig.browser.json` – TypeScript-Konfiguration für die statische Browserdatei
-- `tsconfig.json` – TypeScript-Konfiguration für das Parkhaus
+- `tsconfig.json` – TypeScript-Konfiguration für die Terminal-App
 - `Plannung/Projektplan.md` – Aufgabenstellung und fachliche Planung
-- `assets/` – Projektressourcen
+- `Plannung/Park-backend1..2.png` und `Plannung/Park-frontend1..3.png` – Planungs- und Architekturzeichnungen
 
 ## Planung
 
-Der aktuelle Funktionsumfang entwickelt sich entlang des [Projektplans](./Plannung/Projektplan.md). Optionale steuerbare Testläufe mit `MengeEin`, `MengeAus` und `Zeitraum` sind noch nicht implementiert.
+Der aktuelle Funktionsumfang wurde entlang des [Projektplans](./Plannung/Projektplan.md) umgesetzt. Optionale steuerbare Testläufe mit `MengeEin`, `MengeAus` und `Zeitraum` sind als möglicher Ausblick im Plan vermerkt.
 
 ## Hinweis
 
 Dieses Projekt dient ausschließlich zum Lernen und Üben. Es wird ohne Gewährleistung bereitgestellt und ist nicht für den produktiven Einsatz bestimmt.
+
+## Beispiel
+
+Ein manueller Lauf der Terminalversion beginnt mit:
+
+```bash
+cd "Typescript intro/Parkhaus"
+npx ts-node Parkhaus.ts
+```
+
+Danach lassen sich beispielsweise `Öffnen`, `Einparken`, `Einnahmen` und `Schließen` eingeben. Die Browserversion verwendet dieselben Simulationsregeln in einer interaktiven Weboberfläche.
